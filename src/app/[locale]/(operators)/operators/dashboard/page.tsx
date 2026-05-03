@@ -15,6 +15,7 @@ import {
   type DashboardStats,
 } from "@/lib/dashboard-mock";
 import type { BookingStatus } from "@/lib/types";
+import type { DestinationSlug } from "@/lib/constants";
 
 type PageProps = { params: Promise<{ locale: string }> };
 
@@ -219,7 +220,7 @@ async function loadDashboardData(): Promise<DashboardData> {
       supabase
         .from("bookings")
         .select(
-          "id, tourist_name, badge_id, date, status, total_price, created_at"
+          "id, tourist_name, badge_id, destination_id, date, party_size, status, total_price, commission, message, created_at"
         )
         .eq("guide_id", guide.id)
         .order("created_at", { ascending: false })
@@ -243,17 +244,29 @@ async function loadDashboardData(): Promise<DashboardData> {
         id: string;
         tourist_name: string;
         badge_id: string;
+        destination_id: string;
         date: string;
+        party_size: number;
         status: BookingStatus;
         total_price: number;
+        commission: number;
+        message: string | null;
+        created_at: string;
       }) => ({
         id: b.id,
         tourist_name: b.tourist_name ?? "—",
         badge_name: b.badge_id,
+        badge_id: b.badge_id,
+        destination_id: b.destination_id as DestinationSlug,
+        destination_brand: b.destination_id,
         date: b.date,
+        party_size: Number(b.party_size ?? 1),
         status: b.status,
         total_price: Number(b.total_price ?? 0),
+        commission: Number(b.commission ?? 0),
         currency: "USD",
+        message: b.message,
+        created_at: b.created_at,
       })
     );
 
