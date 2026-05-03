@@ -3,8 +3,6 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { Josefin_Sans, Inter } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
@@ -67,11 +65,7 @@ export default async function LocaleLayout({
     >
       <body className="min-h-screen flex flex-col bg-ocean text-white font-body">
         <NextIntlClientProvider>
-          <AuthProvider>
-            <Header />
-            <main className="flex-1 flex flex-col">{children}</main>
-            <Footer />
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>
