@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pura Vida Quest — Splash screen source (1284×2778, iPhone 14 Pro Max).
+  Export to assets/splash.png at 1284×2778. Expo will letterbox to fit
+  other devices since resizeMode is "contain" in app.json.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1284 2778" width="1284" height="2778">
+  <defs>
+    <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8842a" stop-opacity="0.55"/>
+      <stop offset="12%" stop-color="#f2b705" stop-opacity="0.18"/>
+      <stop offset="22%" stop-color="#faf9f6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="iconBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#52b788"/>
+      <stop offset="100%" stop-color="#0d2818"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Cloud-white background -->
+  <rect x="0" y="0" width="1284" height="2778" fill="#faf9f6"/>
+
+  <!-- Top-edge sunset gradient overlay -->
+  <rect x="0" y="0" width="1284" height="800" fill="url(#sunset)"/>
+
+  <!-- Centered app icon (rounded square, matches assets/source/icon.svg at 520×520) -->
+  <g transform="translate(382 1120)">
+    <rect x="0" y="0" width="520" height="520" rx="116" ry="116" fill="url(#iconBg)"/>
+    <circle cx="260" cy="260" r="190" fill="none" stroke="#f2b705" stroke-width="5" stroke-opacity="0.45"/>
+
+    <!-- Palm — scaled copy of icon artwork -->
+    <g transform="translate(260 260) scale(0.52) translate(-512 -512)">
+      <path d="M 512 740 C 496 640 500 560 508 460 C 514 430 530 430 536 460 C 544 560 548 640 532 740 Z" fill="#3d2c1e"/>
+      <g transform="translate(522 450)">
+        <path d="M 0 0 C -60 -40 -200 -70 -320 -30 C -240 -80 -140 -100 -10 -60 Z" fill="#52b788"/>
+        <path d="M 0 0 C 60 -40 200 -70 320 -30 C 240 -80 140 -100 10 -60 Z" fill="#52b788"/>
+        <path d="M 0 0 C -40 -80 -120 -180 -240 -230 C -180 -150 -100 -100 -10 -40 Z" fill="#3c8e6d"/>
+        <path d="M 0 0 C 40 -80 120 -180 240 -230 C 180 -150 100 -100 10 -40 Z" fill="#3c8e6d"/>
+        <path d="M 0 0 C -10 -120 -60 -260 -140 -360 C -100 -240 -50 -140 -5 -50 Z" fill="#2d6a4f"/>
+        <path d="M 0 0 C 10 -120 60 -260 140 -360 C 100 -240 50 -140 5 -50 Z" fill="#2d6a4f"/>
+      </g>
+      <circle cx="498" cy="458" r="12" fill="#f2b705"/>
+      <circle cx="548" cy="454" r="10" fill="#e8842a"/>
+    </g>
+  </g>
+
+  <!-- Wordmark — Playfair Display Bold -->
+  <text x="642" y="1780" text-anchor="middle"
+        font-family="Playfair Display, Georgia, serif"
+        font-size="96" font-weight="700" fill="#0d2818">
+    Pura Vida Quest
+  </text>
+
+  <!-- Tagline -->
+  <text x="642" y="1850" text-anchor="middle"
+        font-family="Outfit, Helvetica, sans-serif"
+        font-size="38" font-weight="500" fill="#3d2c1e" opacity="0.75">
+    Explore Costa Rica · Collect Badges
+  </text>
+</svg>

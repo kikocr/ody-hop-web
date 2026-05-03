@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pura Vida Quest — App icon source (1024×1024).
+  Export to assets/icon.png at 1024×1024. For Android adaptive icon,
+  export the same artwork centered with 20% padding into
+  assets/adaptive-icon.png so Android's mask doesn't crop the palm.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#52b788"/>
+      <stop offset="100%" stop-color="#0d2818"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d2c1e"/>
+      <stop offset="100%" stop-color="#1f1710"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square background (iOS masks to 22.37% radius, Android adaptive clips separately) -->
+  <rect x="0" y="0" width="1024" height="1024" rx="228" ry="228" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1024" height="1024" rx="228" ry="228" fill="url(#glow)"/>
+
+  <!-- Gold accent ring — subtle equator highlight -->
+  <circle cx="512" cy="512" r="380" fill="none" stroke="#f2b705" stroke-width="10" stroke-opacity="0.45"/>
+  <circle cx="512" cy="512" r="380" fill="none" stroke="#f2b705" stroke-width="4" stroke-opacity="0.9" stroke-dasharray="2 30"/>
+
+  <!-- Palm trunk -->
+  <path d="M 512 740 C 496 640 500 560 508 460 C 514 430 530 430 536 460 C 544 560 548 640 532 740 Z"
+        fill="url(#trunk)"/>
+
+  <!-- Palm fronds (8 blades radiating from top of trunk) -->
+  <g transform="translate(522 450)" fill="#52b788">
+    <path d="M 0 0 C -60 -40 -200 -70 -320 -30 C -240 -80 -140 -100 -10 -60 Z"/>
+    <path d="M 0 0 C 60 -40 200 -70 320 -30 C 240 -80 140 -100 10 -60 Z"/>
+    <path d="M 0 0 C -40 -80 -120 -180 -240 -230 C -180 -150 -100 -100 -10 -40 Z" fill="#3c8e6d"/>
+    <path d="M 0 0 C 40 -80 120 -180 240 -230 C 180 -150 100 -100 10 -40 Z" fill="#3c8e6d"/>
+    <path d="M 0 0 C -10 -120 -60 -260 -140 -360 C -100 -240 -50 -140 -5 -50 Z" fill="#2d6a4f"/>
+    <path d="M 0 0 C 10 -120 60 -260 140 -360 C 100 -240 50 -140 5 -50 Z" fill="#2d6a4f"/>
+    <path d="M 0 0 C 40 -60 180 -80 300 -50 C 220 -30 100 -10 10 -10 Z" fill="#74c69d"/>
+    <path d="M 0 0 C -40 -60 -180 -80 -300 -50 C -220 -30 -100 -10 -10 -10 Z" fill="#74c69d"/>
+  </g>
+
+  <!-- Coconuts (3 gold dots at base of fronds) -->
+  <circle cx="498" cy="458" r="12" fill="#f2b705"/>
+  <circle cx="548" cy="454" r="10" fill="#e8842a"/>
+  <circle cx="524" cy="472" r="9" fill="#f2b705"/>
+
+  <!-- Horizon line (subtle beach suggestion) -->
+  <path d="M 100 760 Q 512 780 924 760" stroke="#f2b705" stroke-width="3" stroke-opacity="0.4" fill="none"/>
+</svg>

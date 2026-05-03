@@ -1,0 +1,5 @@
+# This directory holds images downloaded by
+# scripts/download-badge-images.ts before they are pushed to Supabase
+# Storage by scripts/upload-to-supabase.ts. The .jpg files are
+# intentionally git-ignored (see .gitignore) — they live on the CDN,
+# not in the app binary.
