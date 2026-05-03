@@ -233,7 +233,21 @@
     "menu": "Menu",
     "notifications": "Notifications",
     "viewProfile": "View profile",
-    "loadingDashboard": "Loading your dashboard…"
+    "loadingDashboard": "Loading your dashboard…",
+    "viewAll": "View all",
+    "vsLastMonth": "vs last month",
+    "thisMonth": "this month",
+    "emptyBookings": "No bookings yet. Reservations will show up here as soon as travelers book.",
+    "emptyReviews": "No reviews yet. They'll appear after your first completed bookings.",
+    "bookingStatus": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "actionEditListings": "Add or edit your offers across destinations",
+    "actionViewBookings": "Review pending and upcoming reservations",
+    "actionUpdateProfile": "Polish your photo, bio, and service areas"
   },
   "login": {
     "title": "Operator Login",

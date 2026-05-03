@@ -233,7 +233,21 @@
     "menu": "Menú",
     "notifications": "Notificaciones",
     "viewProfile": "Ver perfil",
-    "loadingDashboard": "Cargando tu panel…"
+    "loadingDashboard": "Cargando tu panel…",
+    "viewAll": "Ver todo",
+    "vsLastMonth": "vs mes anterior",
+    "thisMonth": "este mes",
+    "emptyBookings": "Aún no hay reservas. Aparecerán aquí en cuanto los viajeros reserven.",
+    "emptyReviews": "Aún no hay reseñas. Aparecerán después de tus primeras reservas completadas.",
+    "bookingStatus": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
+    },
+    "actionEditListings": "Agrega o edita tus ofertas en cada destino",
+    "actionViewBookings": "Revisa reservas pendientes y próximas",
+    "actionUpdateProfile": "Pule tu foto, bio y zonas de servicio"
   },
   "login": {
     "title": "Inicio de sesión de operador",
