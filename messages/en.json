@@ -129,11 +129,36 @@
   "about": {
     "title": "About Ody Hop",
     "mission": "Making tourism more engaging, rewarding, and connected",
-    "storyTitle": "Our Story"
+    "storyTitle": "Our Story",
+    "storyPara1": "We built Ody Hop because we believe travel should be more than sightseeing — it should be an adventure. We combine the thrill of game mechanics with the richness of local culture to create experiences travelers actually remember.",
+    "storyPara2": "It started with one country and 100 badges. Each badge is a real place, a real flavor, a real story. Today we're six destinations and growing — Costa Rica, Iceland, Peru, Thailand, Saudi Arabia, and Alaska.",
+    "storyPara3": "Our goal is simple: send travelers home with more than photos. With badges they earned, memories they made, and real connections to the people who showed them the way.",
+    "teamTitle": "Meet the Team",
+    "teamSubtitle": "Real names and photos coming soon.",
+    "founder1Name": "Founder One",
+    "founder1Role": "Co-founder & CEO",
+    "founder1Bio": "Building tools that make travel feel like an adventure. Lifelong otter fan.",
+    "founder2Name": "Founder Two",
+    "founder2Role": "Co-founder & Operations",
+    "founder2Bio": "Spent the last decade running tour operations across Latin America.",
+    "valuesTitle": "What We Believe",
+    "value1Title": "Engage",
+    "value1Desc": "Gamification makes exploration genuinely addictive — and that's a good thing.",
+    "value2Title": "Connect",
+    "value2Desc": "Every badge is a chance to learn from a local who lives the place every day.",
+    "value3Title": "Reward",
+    "value3Desc": "Real prizes for real adventures, from sponsors who care about authentic travel.",
+    "pressTitle": "Press & Partnerships",
+    "pressDesc": "Need assets for press, sponsorships, or destination partnerships? We're happy to help.",
+    "pressEmail": "press@odyhop.com",
+    "pressCta": "Contact us"
   },
   "download": {
     "title": "Download Ody Hop",
     "subtitle": "Available on iOS and Android",
-    "scanQr": "Scan to download"
+    "scanQr": "Scan to download",
+    "freeNote": "Free to download. Premium features available.",
+    "previewLabel": "App preview",
+    "qrCaption": "Point your phone camera here"
   }
 }

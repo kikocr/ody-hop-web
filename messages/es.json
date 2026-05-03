@@ -129,11 +129,36 @@
   "about": {
     "title": "Acerca de Ody Hop",
     "mission": "Hacer del turismo algo más entretenido, gratificante y conectado",
-    "storyTitle": "Nuestra historia"
+    "storyTitle": "Nuestra historia",
+    "storyPara1": "Construimos Ody Hop porque creemos que viajar debería ser más que ver lugares — debería ser una aventura. Combinamos la emoción de los videojuegos con la riqueza de la cultura local para crear experiencias que los viajeros realmente recuerden.",
+    "storyPara2": "Empezó con un país y 100 insignias. Cada insignia es un lugar real, un sabor real, una historia real. Hoy somos seis destinos y creciendo — Costa Rica, Islandia, Perú, Tailandia, Arabia Saudita y Alaska.",
+    "storyPara3": "Nuestra meta es simple: que cada viajero vuelva a casa con más que fotos. Con insignias ganadas, recuerdos vividos y conexiones reales con quienes les mostraron el camino.",
+    "teamTitle": "Conoce al equipo",
+    "teamSubtitle": "Nombres y fotos reales próximamente.",
+    "founder1Name": "Fundador Uno",
+    "founder1Role": "Cofundador & CEO",
+    "founder1Bio": "Construyendo herramientas que hacen que viajar se sienta como una aventura. Fan eterno de las nutrias.",
+    "founder2Name": "Fundadora Dos",
+    "founder2Role": "Cofundadora & Operaciones",
+    "founder2Bio": "Pasó la última década manejando operaciones turísticas en toda Latinoamérica.",
+    "valuesTitle": "En qué creemos",
+    "value1Title": "Engánchate",
+    "value1Desc": "La gamificación hace que explorar enganche de verdad — y eso es algo bueno.",
+    "value2Title": "Conecta",
+    "value2Desc": "Cada insignia es una oportunidad de aprender de alguien que vive ese lugar cada día.",
+    "value3Title": "Gana",
+    "value3Desc": "Premios reales por aventuras reales, de patrocinadores que valoran el viaje auténtico.",
+    "pressTitle": "Prensa y alianzas",
+    "pressDesc": "¿Necesitas assets para prensa, patrocinios o alianzas con destinos? Con gusto te ayudamos.",
+    "pressEmail": "press@odyhop.com",
+    "pressCta": "Escríbenos"
   },
   "download": {
     "title": "Descarga Ody Hop",
     "subtitle": "Disponible en iOS y Android",
-    "scanQr": "Escanea para descargar"
+    "scanQr": "Escanea para descargar",
+    "freeNote": "Gratis. Funciones premium disponibles.",
+    "previewLabel": "Vista previa de la app",
+    "qrCaption": "Apunta la cámara de tu teléfono aquí"
   }
 }
