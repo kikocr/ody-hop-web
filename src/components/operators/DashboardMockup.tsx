@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { GlassCard } from "@/components/ui/GlassCard";
 
 const NAV_ITEMS = [
@@ -68,7 +69,13 @@ export function DashboardMockup() {
         <div className="flex items-center justify-between border-b border-glass-border bg-ocean-dark/60 px-4 py-3">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-2 font-display text-sm font-bold text-amber">
-              <span aria-hidden className="text-base">🦦</span>
+              <Image
+                src="/assets/icon.png"
+                alt=""
+                width={20}
+                height={20}
+                className="h-5 w-5 shrink-0"
+              />
               Ody Hop
             </span>
             <span className="hidden font-body text-xs text-warmgray sm:inline">

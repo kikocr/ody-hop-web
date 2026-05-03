@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useAuth } from "@/components/providers/AuthProvider";
@@ -172,7 +173,14 @@ function DesktopSidebar({
         className="flex h-20 items-center gap-2 border-b border-glass-border px-5 font-display text-2xl font-bold tracking-wide text-amber"
         aria-label="Ody Hop dashboard"
       >
-        <span aria-hidden className="text-2xl">🦦</span>
+        <Image
+          src="/assets/icon.png"
+          alt=""
+          width={32}
+          height={32}
+          priority
+          className="h-8 w-8 shrink-0"
+        />
         <span>Ody Hop</span>
       </Link>
 
@@ -391,7 +399,13 @@ function MobileTopBar({ onMenuOpen }: { onMenuOpen: () => void }) {
         href="/operators/dashboard"
         className="flex items-center gap-2 font-display text-lg font-bold text-amber"
       >
-        <span aria-hidden className="text-xl">🦦</span>
+        <Image
+          src="/assets/icon.png"
+          alt=""
+          width={28}
+          height={28}
+          className="h-7 w-7 shrink-0"
+        />
         <span>Ody Hop</span>
       </Link>
       <button
@@ -446,7 +460,13 @@ function MobileDrawer({
             href="/operators/dashboard"
             className="flex items-center gap-2 font-display text-lg font-bold text-amber"
           >
-            <span aria-hidden className="text-xl">🦦</span>
+            <Image
+              src="/assets/icon.png"
+              alt=""
+              width={28}
+              height={28}
+              className="h-7 w-7 shrink-0"
+            />
             <span>Ody Hop</span>
           </Link>
           <button

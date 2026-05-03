@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState, type FormEvent } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/i18n/routing";
@@ -131,7 +132,14 @@ export function OperatorLoginForm() {
           className="mb-8 flex items-center justify-center gap-2 font-display text-2xl font-bold tracking-wide text-amber"
           aria-label="Ody Hop home"
         >
-          <span aria-hidden className="text-2xl">🦦</span>
+          <Image
+            src="/assets/icon.png"
+            alt=""
+            width={36}
+            height={36}
+            priority
+            className="h-9 w-9 shrink-0"
+          />
           <span>Ody Hop</span>
         </Link>
 

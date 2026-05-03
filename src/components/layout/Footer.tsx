@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
@@ -53,7 +54,13 @@ export async function Footer() {
               className="flex items-center gap-2 font-display text-2xl font-bold tracking-wide text-amber"
               aria-label="Ody Hop home"
             >
-              <span aria-hidden className="text-2xl">🦦</span>
+              <Image
+                src="/assets/icon.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 shrink-0"
+              />
               <span>Ody Hop</span>
             </Link>
             <p className="font-body text-sm text-warmgray">
