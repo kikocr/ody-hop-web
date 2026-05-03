@@ -482,5 +482,225 @@
     "freeNote": "Free to download. Premium features available.",
     "previewLabel": "App preview",
     "qrCaption": "Point your phone camera here"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "metaDescription": "How Ody Hop collects, uses, and protects your data.",
+    "heroDescription": "How we collect, use, and protect your data.",
+    "lastUpdatedLabel": "Last updated",
+    "lastUpdated": "June 2026",
+    "tocTitle": "On this page",
+    "backToTop": "Back to top",
+    "intro1": "Ody Hop (\"we\", \"us\", \"our\") is a gamified tourism platform that connects travelers with destinations, badges, and local tour operators. This Privacy Policy explains what information we collect, how we use it, who we share it with, and the rights you have over your data.",
+    "intro2": "This policy applies to the Ody Hop mobile app, the website at odyhop.com, and any related services we offer.",
+    "sections": [
+      {
+        "id": "collect",
+        "title": "Information we collect",
+        "intro": "When you use Ody Hop, we collect the following types of information:",
+        "items": [
+          "Account data: your email address, a hashed password (managed by Supabase Auth), display name, and account type (tourist or operator).",
+          "Profile data: optional avatar photo, country, and trip preferences you choose to share.",
+          "Location data: GPS coordinates collected only during active badge claiming — never in the background. We use these coordinates to verify that you are physically at the badge location, and we do not retain the raw coordinates after verification.",
+          "Photos: photos you submit to claim badges are stored in Supabase Storage. These photos may be visible to other users in badge galleries. By submitting a photo, you grant Ody Hop a license to display it within the platform.",
+          "Operator data: business name, contact information, bio, certifications, service areas, pricing, photos, and social links submitted by tour operators are displayed publicly in the guide marketplace.",
+          "Operator application data: every field of the partner application form is stored in our database for review and record-keeping.",
+          "Usage data: app interactions, badge collection history, points earned, and leaderboard position.",
+          "Payment data: payments are processed by Stripe. Ody Hop does not store credit card numbers or bank account details. Stripe's privacy policy governs payment processing.",
+          "Voice and audio data: the Tico Translator feature streams audio to xAI's API for real-time translation. Ody Hop does not retain this audio. xAI's privacy policy governs audio processing."
+        ]
+      },
+      {
+        "id": "use",
+        "title": "How we use data",
+        "intro": "We use the information we collect to:",
+        "items": [
+          "Operate and improve the service, including badge verification, leaderboards, and bookings.",
+          "Connect tourists with tour operators inside badge cards.",
+          "Process bookings and calculate commissions on completed experiences.",
+          "Send transactional emails such as booking confirmations, account notices, and application status updates.",
+          "Produce aggregate analytics about platform usage. We do not sell individual tracking data to third parties."
+        ]
+      },
+      {
+        "id": "share",
+        "title": "Data sharing",
+        "intro": "We share data only as needed to operate the service:",
+        "items": [
+          "Tour operators see the tourist's name and booking details once a booking is confirmed.",
+          "Other users see your display name, badge count, and leaderboard position.",
+          "We do not sell personal data to third parties.",
+          "We use the following service providers, each governed by their own privacy policy: Supabase (database and authentication), Stripe (payments), xAI (translation), Vercel (website hosting), and Apple and Google (app distribution)."
+        ]
+      },
+      {
+        "id": "retention",
+        "title": "Data retention",
+        "intro": "We retain data only as long as needed for the service:",
+        "items": [
+          "Account data is retained while your account is active.",
+          "You can request account deletion at any time by emailing privacy@odyhop.com.",
+          "Operator application data is retained for two years after rejection. Approved operators' data is retained for as long as the account is active.",
+          "Badge claim photos are retained indefinitely unless you request deletion."
+        ]
+      },
+      {
+        "id": "children",
+        "title": "Children's privacy",
+        "body": "Ody Hop is not directed at children under 13. We do not knowingly collect personal data from anyone under 13. If you believe we have collected data from a child, please contact us at privacy@odyhop.com and we will delete it."
+      },
+      {
+        "id": "cookies",
+        "title": "Cookies (website)",
+        "intro": "Our website uses a minimal set of cookies:",
+        "items": [
+          "Authentication session cookies — strictly functional, required to keep operators signed in to the dashboard.",
+          "We do not use advertising or third-party tracking cookies.",
+          "We do not use analytics cookies in the current version of the site."
+        ]
+      },
+      {
+        "id": "rights",
+        "title": "Your rights",
+        "intro": "You have the right to:",
+        "items": [
+          "Access, correct, or delete your personal data.",
+          "Export the data associated with your account.",
+          "Opt out of any promotional communications you have signed up for.",
+          "Contact us with any privacy question at privacy@odyhop.com."
+        ]
+      },
+      {
+        "id": "updates",
+        "title": "Updates to this policy",
+        "body": "We may update this Privacy Policy from time to time. Material changes will be posted on this page with a new effective date. Continued use of Ody Hop after an update means you accept the revised policy."
+      },
+      {
+        "id": "contact",
+        "title": "Contact",
+        "body": "Questions or requests about your privacy? Email privacy@odyhop.com."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "metaDescription": "Terms and conditions for using the Ody Hop platform.",
+    "heroDescription": "The terms and conditions for using the Ody Hop platform.",
+    "lastUpdatedLabel": "Last updated",
+    "lastUpdated": "June 2026",
+    "tocTitle": "On this page",
+    "backToTop": "Back to top",
+    "intro1": "These Terms of Service govern your use of Ody Hop's mobile app, website at odyhop.com, and related services. Please read them carefully.",
+    "intro2": "We use \"Ody Hop\", \"we\", \"us\", and \"our\" to refer to the company operating the service. We use \"you\" to refer to anyone who uses Ody Hop, whether as a tourist or as an operator.",
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": "Acceptance",
+        "body": "By creating an account, downloading the Ody Hop mobile app, or using the Ody Hop website, you agree to these Terms of Service. If you do not agree, please do not use the service."
+      },
+      {
+        "id": "accounts",
+        "title": "Account types",
+        "intro": "Ody Hop offers two account types:",
+        "items": [
+          "Tourist accounts: for personal, non-commercial use of the badge collection, leaderboard, and booking features.",
+          "Operator accounts: for licensed tour guides and tourism businesses participating in the marketplace.",
+          "Account type is selected at registration and is permanent. Each person or business may hold one account. You are responsible for keeping your credentials secure and for all activity on your account."
+        ]
+      },
+      {
+        "id": "service",
+        "title": "The service",
+        "intro": "Ody Hop is a gamified tourism platform connecting tourists with local experiences and tour operators.",
+        "items": [
+          "Badge claiming requires physical presence at the badge location, verified by GPS, plus a submitted photo.",
+          "Points, leaderboard rankings, prizes, badge catalogs, and point values are subject to change.",
+          "We reserve the right to modify, suspend, or discontinue features at any time."
+        ]
+      },
+      {
+        "id": "content",
+        "title": "User content",
+        "intro": "You retain ownership of the photos and other content you submit.",
+        "items": [
+          "By submitting a photo or other content, you grant Ody Hop a worldwide, royalty-free, non-exclusive license to display, reproduce, and distribute that content within the Ody Hop platform (mobile app and website).",
+          "You represent that you own or have permission to use any content you upload.",
+          "We may remove content that violates these terms or that we reasonably believe is illegal, infringing, or harmful."
+        ]
+      },
+      {
+        "id": "marketplace",
+        "title": "Tour operator marketplace",
+        "intro": "The marketplace connects tourists with operators. Ody Hop is not a party to the tour or experience contract between them.",
+        "items": [
+          "Operators set their own prices, availability, and cancellation policies.",
+          "Operators are responsible for delivering the experiences they list and for maintaining required licenses, insurance, and certifications.",
+          "Ody Hop charges a commission of 15–20% on completed bookings.",
+          "Ody Hop may suspend or remove operator listings at its discretion, including for quality, safety, or conduct concerns."
+        ]
+      },
+      {
+        "id": "bookings",
+        "title": "Bookings",
+        "intro": "Bookings made through Ody Hop are between the tourist and the operator.",
+        "items": [
+          "Cancellation, refund, and rescheduling policies are set by individual operators and shown at booking time.",
+          "Ody Hop is not liable for the quality, safety, or delivery of any tour or experience.",
+          "Disputes should first be raised with the operator. If they cannot be resolved, you can contact Ody Hop support at support@odyhop.com."
+        ]
+      },
+      {
+        "id": "prohibited",
+        "title": "Prohibited conduct",
+        "intro": "You agree not to:",
+        "items": [
+          "Spoof or fake your GPS location to fraudulently claim badges.",
+          "Submit photos you did not take or do not have rights to use.",
+          "Create multiple accounts to manipulate leaderboards, prizes, or rankings.",
+          "Harass, threaten, or abuse other users, operators, or Ody Hop staff.",
+          "Use the platform for any illegal activity or in violation of any applicable law."
+        ]
+      },
+      {
+        "id": "prizes",
+        "title": "Prizes and rewards",
+        "intro": "Prizes are subject to availability and sponsor participation.",
+        "items": [
+          "Ody Hop reserves the right to verify badge claims before awarding prizes or unlocking rewards.",
+          "Fraudulent claims, including any of the prohibited conduct above, may result in account termination, forfeiture of points, badges, and prizes, and removal from the marketplace."
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "Limitation of liability",
+        "intro": "To the fullest extent allowed by law:",
+        "items": [
+          "Ody Hop is provided \"as is\" without warranties of any kind, express or implied.",
+          "We are not liable for injuries, losses, or damages arising from tours, experiences, or other services booked through the platform.",
+          "Our total liability for any claim is limited to the total amount you paid to Ody Hop in the twelve months preceding the claim.",
+          "We are not responsible for the conduct of operators, tour safety, or the acts or omissions of any third-party service provider."
+        ]
+      },
+      {
+        "id": "termination",
+        "title": "Termination",
+        "intro": "Either party can end the relationship:",
+        "items": [
+          "You may delete your account at any time by contacting support@odyhop.com.",
+          "We may suspend or terminate accounts that violate these Terms or that we reasonably believe pose a risk to the platform or other users.",
+          "Operators may be removed from the marketplace for quality, conduct, or compliance issues."
+        ]
+      },
+      {
+        "id": "law",
+        "title": "Governing law",
+        "body": "These Terms are governed by the laws of [jurisdiction TBD]. Any dispute will be resolved in the courts of that jurisdiction."
+      },
+      {
+        "id": "contact",
+        "title": "Contact",
+        "body": "Questions about these Terms? Email support@odyhop.com."
+      }
+    ]
   }
 }

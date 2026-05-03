@@ -482,5 +482,225 @@
     "freeNote": "Gratis. Funciones premium disponibles.",
     "previewLabel": "Vista previa de la app",
     "qrCaption": "Apunta la cámara de tu teléfono aquí"
+  },
+  "privacy": {
+    "title": "Política de privacidad",
+    "metaDescription": "Cómo Ody Hop recopila, usa y protege tus datos.",
+    "heroDescription": "Cómo recopilamos, usamos y protegemos tus datos.",
+    "lastUpdatedLabel": "Última actualización",
+    "lastUpdated": "Junio 2026",
+    "tocTitle": "En esta página",
+    "backToTop": "Volver arriba",
+    "intro1": "Ody Hop (\"nosotros\") es una plataforma turística gamificada que conecta a viajeros con destinos, insignias y operadores turísticos locales. Esta Política de privacidad explica qué información recopilamos, cómo la usamos, con quién la compartimos y los derechos que tienes sobre tus datos.",
+    "intro2": "Esta política aplica a la app móvil de Ody Hop, al sitio web odyhop.com y a cualquier servicio relacionado que ofrezcamos.",
+    "sections": [
+      {
+        "id": "collect",
+        "title": "Información que recopilamos",
+        "intro": "Cuando usas Ody Hop, recopilamos los siguientes tipos de información:",
+        "items": [
+          "Datos de cuenta: tu correo electrónico, una contraseña con hash (manejada por Supabase Auth), nombre visible y tipo de cuenta (turista u operador).",
+          "Datos de perfil: foto de avatar opcional, país y preferencias de viaje que decidas compartir.",
+          "Datos de ubicación: coordenadas GPS recopiladas únicamente durante el reclamo activo de una insignia — nunca en segundo plano. Usamos estas coordenadas para verificar que estás físicamente en el lugar de la insignia, y no conservamos las coordenadas en bruto después de la verificación.",
+          "Fotos: las fotos que envías para reclamar insignias se almacenan en Supabase Storage. Estas fotos pueden ser visibles para otros usuarios en las galerías de insignias. Al enviar una foto, le otorgas a Ody Hop una licencia para mostrarla dentro de la plataforma.",
+          "Datos del operador: el nombre del negocio, la información de contacto, la biografía, las certificaciones, las áreas de servicio, los precios, las fotos y los enlaces de redes sociales que envían los operadores se muestran públicamente en el directorio de guías.",
+          "Datos de la postulación de operador: cada campo del formulario de postulación se guarda en nuestra base de datos para revisión y registro.",
+          "Datos de uso: interacciones en la app, historial de insignias coleccionadas, puntos ganados y posición en la tabla de líderes.",
+          "Datos de pago: los pagos los procesa Stripe. Ody Hop no almacena números de tarjeta de crédito ni datos bancarios. La política de privacidad de Stripe rige el procesamiento de pagos.",
+          "Datos de voz y audio: la función Tico Translator transmite audio a la API de xAI para traducción en tiempo real. Ody Hop no conserva ese audio. La política de privacidad de xAI rige el procesamiento del audio."
+        ]
+      },
+      {
+        "id": "use",
+        "title": "Cómo usamos tus datos",
+        "intro": "Usamos la información que recopilamos para:",
+        "items": [
+          "Operar y mejorar el servicio, incluyendo la verificación de insignias, las tablas de líderes y las reservas.",
+          "Conectar a turistas con operadores turísticos dentro de las tarjetas de insignia.",
+          "Procesar reservas y calcular comisiones sobre las experiencias completadas.",
+          "Enviar correos transaccionales como confirmaciones de reserva, avisos de cuenta y actualizaciones del estado de tu postulación.",
+          "Generar analíticas agregadas sobre el uso de la plataforma. No vendemos datos de seguimiento individual a terceros."
+        ]
+      },
+      {
+        "id": "share",
+        "title": "Cómo compartimos tus datos",
+        "intro": "Solo compartimos datos cuando es necesario para operar el servicio:",
+        "items": [
+          "Los operadores ven el nombre del turista y los detalles de la reserva una vez que esta se confirma.",
+          "Otros usuarios ven tu nombre visible, tu cantidad de insignias y tu posición en la tabla de líderes.",
+          "No vendemos datos personales a terceros.",
+          "Usamos los siguientes proveedores de servicios, cada uno con su propia política de privacidad: Supabase (base de datos y autenticación), Stripe (pagos), xAI (traducción), Vercel (hosting del sitio) y Apple y Google (distribución de la app)."
+        ]
+      },
+      {
+        "id": "retention",
+        "title": "Retención de datos",
+        "intro": "Conservamos los datos solo el tiempo necesario para el servicio:",
+        "items": [
+          "Los datos de la cuenta se conservan mientras tu cuenta esté activa.",
+          "Puedes solicitar la eliminación de tu cuenta en cualquier momento escribiendo a privacy@odyhop.com.",
+          "Los datos de las postulaciones rechazadas se conservan por dos años. Los datos de los operadores aprobados se conservan mientras la cuenta siga activa.",
+          "Las fotos de reclamo de insignia se conservan indefinidamente, salvo que pidas que se eliminen."
+        ]
+      },
+      {
+        "id": "children",
+        "title": "Privacidad de menores",
+        "body": "Ody Hop no está dirigido a menores de 13 años. No recopilamos a sabiendas datos personales de menores de 13. Si crees que recopilamos datos de un menor, escríbenos a privacy@odyhop.com y los eliminaremos."
+      },
+      {
+        "id": "cookies",
+        "title": "Cookies (sitio web)",
+        "intro": "Nuestro sitio web usa un conjunto mínimo de cookies:",
+        "items": [
+          "Cookies de sesión de autenticación — estrictamente funcionales, necesarias para mantener a los operadores con sesión iniciada en el panel.",
+          "No usamos cookies de publicidad ni de seguimiento de terceros.",
+          "No usamos cookies de analítica en la versión actual del sitio."
+        ]
+      },
+      {
+        "id": "rights",
+        "title": "Tus derechos",
+        "intro": "Tienes derecho a:",
+        "items": [
+          "Acceder, corregir o eliminar tus datos personales.",
+          "Exportar los datos asociados a tu cuenta.",
+          "Darte de baja de cualquier comunicación promocional a la que te hayas suscrito.",
+          "Contactarnos con cualquier pregunta de privacidad escribiendo a privacy@odyhop.com."
+        ]
+      },
+      {
+        "id": "updates",
+        "title": "Actualizaciones de esta política",
+        "body": "Podemos actualizar esta Política de privacidad de vez en cuando. Los cambios importantes se publicarán en esta página con una nueva fecha de vigencia. Si sigues usando Ody Hop después de una actualización, significa que aceptas la política revisada."
+      },
+      {
+        "id": "contact",
+        "title": "Contacto",
+        "body": "¿Tienes dudas o solicitudes sobre tu privacidad? Escríbenos a privacy@odyhop.com."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Términos del servicio",
+    "metaDescription": "Términos y condiciones para usar la plataforma Ody Hop.",
+    "heroDescription": "Los términos y condiciones para usar la plataforma Ody Hop.",
+    "lastUpdatedLabel": "Última actualización",
+    "lastUpdated": "Junio 2026",
+    "tocTitle": "En esta página",
+    "backToTop": "Volver arriba",
+    "intro1": "Estos Términos del servicio rigen tu uso de la app móvil de Ody Hop, el sitio web odyhop.com y los servicios relacionados. Léelos con atención.",
+    "intro2": "Usamos \"Ody Hop\" y \"nosotros\" para referirnos a la empresa que opera el servicio. Usamos \"tú\" para referirnos a cualquier persona que use Ody Hop, ya sea como turista o como operador.",
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": "Aceptación",
+        "body": "Al crear una cuenta, descargar la app móvil de Ody Hop o usar el sitio web de Ody Hop, aceptas estos Términos del servicio. Si no estás de acuerdo, no uses el servicio."
+      },
+      {
+        "id": "accounts",
+        "title": "Tipos de cuenta",
+        "intro": "Ody Hop ofrece dos tipos de cuenta:",
+        "items": [
+          "Cuentas de turista: para uso personal, no comercial, de la colección de insignias, la tabla de líderes y las reservas.",
+          "Cuentas de operador: para guías y empresas turísticas con licencia que participan en el directorio de guías.",
+          "El tipo de cuenta se elige al registrarse y es permanente. Cada persona o empresa puede tener una sola cuenta. Eres responsable de mantener tus credenciales seguras y de toda la actividad de tu cuenta."
+        ]
+      },
+      {
+        "id": "service",
+        "title": "El servicio",
+        "intro": "Ody Hop es una plataforma turística gamificada que conecta a turistas con experiencias locales y operadores.",
+        "items": [
+          "Para reclamar una insignia debes estar físicamente en el lugar, lo que se verifica por GPS, además de enviar una foto.",
+          "Los puntos, las posiciones en la tabla de líderes, los premios, los catálogos de insignias y los valores de puntos pueden cambiar.",
+          "Nos reservamos el derecho de modificar, suspender o descontinuar funciones en cualquier momento."
+        ]
+      },
+      {
+        "id": "content",
+        "title": "Contenido del usuario",
+        "intro": "Conservas la propiedad de las fotos y demás contenido que envíes.",
+        "items": [
+          "Al enviar una foto u otro contenido, le otorgas a Ody Hop una licencia mundial, libre de regalías y no exclusiva para mostrar, reproducir y distribuir ese contenido dentro de la plataforma Ody Hop (app móvil y sitio web).",
+          "Declaras que eres dueño o que tienes permiso para usar cualquier contenido que subas.",
+          "Podemos eliminar contenido que viole estos términos o que razonablemente consideremos ilegal, infractor o dañino."
+        ]
+      },
+      {
+        "id": "marketplace",
+        "title": "Directorio de operadores turísticos",
+        "intro": "El directorio conecta a turistas con operadores. Ody Hop no es parte del contrato de tour o experiencia entre ellos.",
+        "items": [
+          "Los operadores definen sus propios precios, disponibilidad y políticas de cancelación.",
+          "Los operadores son responsables de brindar las experiencias que listan y de mantener las licencias, los seguros y las certificaciones que se requieran.",
+          "Ody Hop cobra una comisión del 15 al 20% sobre las reservas completadas.",
+          "Ody Hop puede suspender o eliminar listados de operadores a su discreción, incluyendo casos de calidad, seguridad o conducta."
+        ]
+      },
+      {
+        "id": "bookings",
+        "title": "Reservas",
+        "intro": "Las reservas hechas a través de Ody Hop son entre el turista y el operador.",
+        "items": [
+          "Las políticas de cancelación, reembolso y reprogramación las define cada operador y se muestran al momento de reservar.",
+          "Ody Hop no es responsable de la calidad, la seguridad ni la entrega de ningún tour o experiencia.",
+          "Las disputas deben resolverse primero con el operador. Si no se resuelven, puedes contactar al soporte de Ody Hop en support@odyhop.com."
+        ]
+      },
+      {
+        "id": "prohibited",
+        "title": "Conducta prohibida",
+        "intro": "Te comprometes a no:",
+        "items": [
+          "Falsificar tu ubicación GPS para reclamar insignias de manera fraudulenta.",
+          "Enviar fotos que no tomaste o sobre las que no tienes derechos.",
+          "Crear varias cuentas para manipular tablas de líderes, premios o posiciones.",
+          "Acosar, amenazar o agredir a otros usuarios, operadores o al equipo de Ody Hop.",
+          "Usar la plataforma para cualquier actividad ilegal o que viole alguna ley aplicable."
+        ]
+      },
+      {
+        "id": "prizes",
+        "title": "Premios y recompensas",
+        "intro": "Los premios están sujetos a disponibilidad y a la participación de los patrocinadores.",
+        "items": [
+          "Ody Hop se reserva el derecho de verificar los reclamos de insignias antes de entregar premios o desbloquear recompensas.",
+          "Los reclamos fraudulentos, incluyendo cualquiera de las conductas prohibidas listadas arriba, pueden resultar en la cancelación de la cuenta, la pérdida de puntos, insignias y premios, y la salida del directorio."
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "Limitación de responsabilidad",
+        "intro": "Hasta donde lo permita la ley:",
+        "items": [
+          "Ody Hop se ofrece \"tal cual\", sin garantías de ningún tipo, expresas o implícitas.",
+          "No somos responsables de lesiones, pérdidas ni daños derivados de tours, experiencias u otros servicios reservados por la plataforma.",
+          "Nuestra responsabilidad total por cualquier reclamación se limita al monto total que le pagaste a Ody Hop en los doce meses anteriores a la reclamación.",
+          "No somos responsables de la conducta de los operadores, la seguridad de los tours ni los actos u omisiones de ningún proveedor externo."
+        ]
+      },
+      {
+        "id": "termination",
+        "title": "Terminación",
+        "intro": "Cualquiera de las partes puede terminar la relación:",
+        "items": [
+          "Puedes eliminar tu cuenta en cualquier momento contactando a support@odyhop.com.",
+          "Podemos suspender o cancelar cuentas que violen estos Términos o que razonablemente consideremos un riesgo para la plataforma u otros usuarios.",
+          "Los operadores pueden ser retirados del directorio por temas de calidad, conducta o cumplimiento."
+        ]
+      },
+      {
+        "id": "law",
+        "title": "Ley aplicable",
+        "body": "Estos Términos se rigen por las leyes de [jurisdicción por definir]. Cualquier disputa se resolverá en los tribunales de esa jurisdicción."
+      },
+      {
+        "id": "contact",
+        "title": "Contacto",
+        "body": "¿Tienes dudas sobre estos Términos? Escríbenos a support@odyhop.com."
+      }
+    ]
   }
 }
