@@ -1,11 +1,25 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { DestinationCard } from "@/components/destinations/DestinationCard";
 import { AppStoreBadges } from "@/components/home/AppStoreBadges";
 import { CATEGORIES, DESTINATIONS } from "@/lib/constants";
+import { buildPageMetadata } from "@/lib/metadata";
 
 type PageProps = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "destinations" });
+  return buildPageMetadata({
+    title: t("hubTitle"),
+    description: t("hubSubtitle"),
+    path: "/destinations",
+    locale,
+    image: "/assets/heroes/hero-costa-rica.jpg",
+  });
+}
 
 export default async function DestinationsHubPage({ params }: PageProps) {
   const { locale } = await params;

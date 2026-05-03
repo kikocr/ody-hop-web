@@ -1,9 +1,23 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AppStoreBadges } from "@/components/home/AppStoreBadges";
+import { buildPageMetadata } from "@/lib/metadata";
 
 type PageProps = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "download" });
+  return buildPageMetadata({
+    title: t("title"),
+    description: t("subtitle"),
+    path: "/download",
+    locale,
+    image: "/assets/splash.png",
+  });
+}
 
 export default async function DownloadPage({ params }: PageProps) {
   const { locale } = await params;

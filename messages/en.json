@@ -418,6 +418,12 @@
     "payoutContact": "Email billing@odyhop.com to set up payouts.",
     "noEarnings": "No completed bookings yet. Earnings will appear here once travelers complete their experiences."
   },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "Looks like this trail doesn't exist. The adventure continues elsewhere.",
+    "backHome": "Back to home",
+    "exploreDestinations": "Explore destinations"
+  },
   "login": {
     "title": "Operator Login",
     "subtitle": "Manage your tours, listings, and bookings",

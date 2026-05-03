@@ -18,6 +18,11 @@ import {
   SAMPLE_BADGES,
   SAMPLE_GUIDES,
 } from "@/lib/mock-data";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  breadcrumbSchema,
+  touristDestinationSchema,
+} from "@/lib/structured-data";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -70,7 +75,24 @@ export default async function DestinationPage({ params }: PageProps) {
   const destination = DESTINATIONS.find((d) => d.slug === slug);
   if (!destination) notFound();
 
-  return <DestinationContent destination={destination} />;
+  return (
+    <>
+      <JsonLd
+        data={[
+          touristDestinationSchema(destination),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Destinations", path: "/destinations" },
+            {
+              name: `${destination.brandName} — ${destination.country}`,
+              path: `/destinations/${destination.slug}`,
+            },
+          ]),
+        ]}
+      />
+      <DestinationContent destination={destination} />
+    </>
+  );
 }
 
 function DestinationContent({ destination }: { destination: Destination }) {

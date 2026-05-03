@@ -418,6 +418,12 @@
     "payoutContact": "Escribe a billing@odyhop.com para configurar tus pagos.",
     "noEarnings": "Aún no hay reservas completadas. Las ganancias aparecerán aquí una vez que los viajeros completen sus experiencias."
   },
+  "notFound": {
+    "title": "Página no encontrada",
+    "subtitle": "Parece que este sendero no existe. La aventura continúa en otro lugar.",
+    "backHome": "Volver al inicio",
+    "exploreDestinations": "Explorar destinos"
+  },
   "login": {
     "title": "Inicio de sesión de operador",
     "subtitle": "Gestiona tus tours, listados y reservas",

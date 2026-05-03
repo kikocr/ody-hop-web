@@ -1,16 +1,37 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationSchema } from "@/lib/structured-data";
+import { buildPageMetadata } from "@/lib/metadata";
 
 type PageProps = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about" });
+  return buildPageMetadata({
+    title: t("title"),
+    description: t("mission"),
+    path: "/about",
+    locale,
+    image: "/assets/splash.png",
+  });
+}
 
 export default async function AboutPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <AboutContent />;
+  return (
+    <>
+      <JsonLd data={organizationSchema()} />
+      <AboutContent />
+    </>
+  );
 }
 
 function AboutContent() {

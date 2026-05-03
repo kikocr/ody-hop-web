@@ -1,13 +1,27 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { HeroDashboardPreview } from "@/components/operators/HeroDashboardPreview";
 import { DashboardMockup } from "@/components/operators/DashboardMockup";
+import { buildPageMetadata } from "@/lib/metadata";
 
 type PageProps = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "operators" });
+  return buildPageMetadata({
+    title: t("heroTitle"),
+    description: t("heroSubtitle"),
+    path: "/operators",
+    locale,
+    image: "/assets/splash.png",
+  });
+}
 
 export default async function OperatorsLandingPage({ params }: PageProps) {
   const { locale } = await params;
