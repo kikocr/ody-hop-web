@@ -65,7 +65,12 @@
     "topExperiences": "Mejores experiencias",
     "meetGuides": "Conoce a tus guías",
     "downloadCta": "Descarga la app y empieza a coleccionar",
-    "categories": "Categorías de insignias"
+    "categories": "Categorías de insignias",
+    "viewProfile": "Ver perfil",
+    "guides": "guías",
+    "readyToExplore": "¿Listo para explorar {country}?",
+    "downloadAndCollect": "Descarga Ody Hop y empieza a coleccionar.",
+    "guidesComingSoon": "Guías próximamente — postúlate y sé de los primeros."
   },
   "operators": {
     "heroTitle": "Haz crecer tu negocio turístico con Ody Hop",

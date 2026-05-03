@@ -65,7 +65,12 @@
     "topExperiences": "Top Experiences",
     "meetGuides": "Meet Your Guides",
     "downloadCta": "Download to Start Collecting",
-    "categories": "Badge Categories"
+    "categories": "Badge Categories",
+    "viewProfile": "View Profile",
+    "guides": "guides",
+    "readyToExplore": "Ready to explore {country}?",
+    "downloadAndCollect": "Download Ody Hop and start collecting.",
+    "guidesComingSoon": "Guides coming soon — apply to be among the first."
   },
   "operators": {
     "heroTitle": "Grow Your Tourism Business with Ody Hop",
