@@ -1,4 +1,5 @@
 import type { BookingStatus } from "@/lib/types";
+import type { DestinationSlug } from "@/lib/constants";
 
 export type DashboardBooking = {
   id: string;
@@ -128,3 +129,102 @@ export const MOCK_STATS: DashboardStats = {
   profileViews: 8200,
   profileViewsTrend: 24,
 };
+
+export type DashboardListing = {
+  id: string;
+  guide_id: string;
+  badge_id: string;
+  badge_name: string;
+  destination_id: DestinationSlug;
+  destination_brand: string;
+  offer_title: string;
+  offer_description: string;
+  price: number;
+  currency: string;
+  promo_text: string | null;
+  is_active: boolean;
+  is_featured: boolean;
+};
+
+export const MOCK_LISTINGS: DashboardListing[] = [
+  {
+    id: "mock-l1",
+    guide_id: "mock-guide-1",
+    badge_id: "cr-arenal",
+    badge_name: "Arenal Volcano Hike",
+    destination_id: "costa-rica",
+    destination_brand: "Pura Vida Quest",
+    offer_title: "Guided Volcano Hike with Lunch",
+    offer_description:
+      "Full-day Arenal Volcano hike with bilingual guide, traditional casado lunch, and a sunset hot springs visit.",
+    price: 120,
+    currency: "USD",
+    promo_text: "Includes transport from La Fortuna",
+    is_active: true,
+    is_featured: true,
+  },
+  {
+    id: "mock-l2",
+    guide_id: "mock-guide-1",
+    badge_id: "cr-pacuare",
+    badge_name: "Pacuare River Rafting",
+    destination_id: "costa-rica",
+    destination_brand: "Pura Vida Quest",
+    offer_title: "Pacuare Class IV Rafting Day",
+    offer_description:
+      "Full day on the Pacuare with a certified river guide. Lunch on the river, transport from San José included.",
+    price: 165,
+    currency: "USD",
+    promo_text: null,
+    is_active: true,
+    is_featured: false,
+  },
+  {
+    id: "mock-l3",
+    guide_id: "mock-guide-1",
+    badge_id: "cr-monteverde",
+    badge_name: "Monteverde Cloud Forest",
+    destination_id: "costa-rica",
+    destination_brand: "Pura Vida Quest",
+    offer_title: "Monteverde Hanging Bridges Walk",
+    offer_description:
+      "Three-hour guided walk across the Selvatura hanging bridges with naturalist commentary on cloud-forest ecology.",
+    price: 65,
+    currency: "USD",
+    promo_text: "Group discounts for 4+",
+    is_active: true,
+    is_featured: false,
+  },
+  {
+    id: "mock-l4",
+    guide_id: "mock-guide-1",
+    badge_id: "cr-sloth",
+    badge_name: "Sloth Spotter",
+    destination_id: "costa-rica",
+    destination_brand: "Pura Vida Quest",
+    offer_title: "Sloth-Spotting Walk in Cahuita",
+    offer_description:
+      "90-minute guided walk in Cahuita National Park with a wildlife biologist. Spotting scope provided.",
+    price: 35,
+    currency: "USD",
+    promo_text: null,
+    is_active: false,
+    is_featured: false,
+  },
+  {
+    id: "mock-l5",
+    guide_id: "mock-guide-1",
+    badge_id: "cr-pacific-sunset",
+    badge_name: "Pacific Sunset",
+    destination_id: "costa-rica",
+    destination_brand: "Pura Vida Quest",
+    offer_title: "Pacific Sunset Beach Bonfire",
+    offer_description:
+      "Private beach bonfire with grilled fish, marshmallows, and stargazing. Up to 8 guests.",
+    price: 85,
+    currency: "USD",
+    promo_text: null,
+    is_active: true,
+    is_featured: false,
+  },
+];
