@@ -23,6 +23,39 @@
   --radius-card: 6px;
 
   --blur-glass: 20px;
+
+  --animate-float: float 3.6s ease-in-out infinite;
+  --animate-float-slow: float 5s ease-in-out infinite;
+  --animate-bob: bob 2.2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
 }
 
 html,
