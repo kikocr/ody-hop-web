@@ -23,8 +23,9 @@ type LoadResult = {
 };
 
 export default async function DashboardBillingPage({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await params;
+  const locale = "en-US";
+  setRequestLocale("en");
   const t = await getTranslations("billing");
   const td = await getTranslations("dashboard");
   const { profile, bookings, payouts } = await loadBilling();

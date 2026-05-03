@@ -12,8 +12,8 @@ type LoadResult = {
 };
 
 export default async function DashboardProfilePage({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await params;
+  setRequestLocale("en");
   const { profile, isMock } = await loadProfile();
   return <ProfileEditor initial={profile} isMock={isMock} />;
 }

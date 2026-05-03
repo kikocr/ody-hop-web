@@ -13,8 +13,9 @@ type LoadResult = {
 };
 
 export default async function DashboardReviewsPage({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await params;
+  const locale = "en-US";
+  setRequestLocale("en");
   const t = await getTranslations("reviews");
   const { reviews } = await loadReviews();
 

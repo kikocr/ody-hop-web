@@ -13,8 +13,8 @@ type LoadResult = {
 };
 
 export default async function DashboardBookingsPage({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await params;
+  setRequestLocale("en");
   const { bookings, isMock } = await loadBookings();
   return <BookingsManager initial={bookings} isMock={isMock} />;
 }

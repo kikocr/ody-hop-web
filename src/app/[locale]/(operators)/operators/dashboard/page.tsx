@@ -28,8 +28,10 @@ type DashboardData = {
 };
 
 export default async function DashboardHomePage({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  // Dashboard is English-only for V1 — see (operators)/.../dashboard/layout.tsx
+  await params;
+  const locale = "en-US";
+  setRequestLocale("en");
 
   const data = await loadDashboardData();
   const t = await getTranslations("dashboard");

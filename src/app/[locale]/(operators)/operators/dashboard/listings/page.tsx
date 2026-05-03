@@ -17,8 +17,8 @@ type LoadResult = {
 };
 
 export default async function DashboardListingsPage({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await params;
+  setRequestLocale("en");
   const { listings, guideId, isMock } = await loadListings();
   return (
     <ListingsManager
