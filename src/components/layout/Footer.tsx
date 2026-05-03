@@ -1,35 +1,7 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/routing";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { DESTINATIONS } from "@/lib/constants";
-
-const COLUMNS = [
-  {
-    heading: "Product",
-    links: [
-      { href: "/", label: "Home" },
-      { href: "/destinations", label: "Destinations" },
-      { href: "/download", label: "Download App" },
-      { href: "/about", label: "About" },
-    ],
-  },
-  {
-    heading: "For Guides",
-    links: [
-      { href: "/operators", label: "Why Ody Hop" },
-      { href: "/operators/apply", label: "Apply Now" },
-      { href: "/operators/login", label: "Operator Login" },
-      { href: "/operators/dashboard", label: "Dashboard" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { href: "/about", label: "About" },
-      { href: "/privacy", label: "Privacy" },
-      { href: "/terms", label: "Terms" },
-      { href: "mailto:hello@odyhop.com", label: "Contact" },
-    ],
-  },
-];
 
 const SOCIAL_LINKS = [
   {
@@ -49,7 +21,28 @@ const SOCIAL_LINKS = [
   },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations("common");
+
+  const productLinks = [
+    { href: "/" as const, label: "Home" },
+    { href: "/destinations" as const, label: t("destinations") },
+    { href: "/download" as const, label: t("download") },
+    { href: "/about" as const, label: t("about") },
+  ];
+
+  const guideLinks = [
+    { href: "/operators" as const, label: t("forGuides") },
+    { href: "/operators/apply" as const, label: t("applyNow") },
+    { href: "/operators/login" as const, label: t("logIn") },
+  ];
+
+  const companyLinks = [
+    { href: "/about" as const, label: t("about") },
+    { href: "/privacy" as const, label: t("privacy") },
+    { href: "/terms" as const, label: t("terms") },
+  ];
+
   return (
     <footer className="border-t border-glass-border bg-ocean-dark">
       <div className="mx-auto w-full max-w-7xl px-4 pb-10 pt-14 sm:px-6 lg:px-8">
@@ -84,7 +77,7 @@ export function Footer() {
 
           <div>
             <h3 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-amber">
-              Destinations
+              {t("destinations")}
             </h3>
             <ul className="mt-4 flex flex-col gap-2">
               {DESTINATIONS.map((dest) => (
@@ -101,40 +94,56 @@ export function Footer() {
             </ul>
           </div>
 
-          {COLUMNS.slice(1).map((column) => (
-            <div key={column.heading}>
-              <h3 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-amber">
-                {column.heading}
-              </h3>
-              <ul className="mt-4 flex flex-col gap-2">
-                {column.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="font-body text-sm text-warmgray transition-colors hover:text-amber"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <h3 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-amber">
+              {t("forGuides")}
+            </h3>
+            <ul className="mt-4 flex flex-col gap-2">
+              {guideLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="font-body text-sm text-warmgray transition-colors hover:text-amber"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-amber">
+              Ody Hop
+            </h3>
+            <ul className="mt-4 flex flex-col gap-2">
+              {productLinks.slice(1).map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="font-body text-sm text-warmgray transition-colors hover:text-amber"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              {companyLinks.slice(1).map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="font-body text-sm text-warmgray transition-colors hover:text-amber"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-glass-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-body text-xs text-warmgray">
-            © 2026 Ody Hop. All rights reserved.
-          </p>
-          <div className="flex items-center gap-3 font-body text-xs text-warmgray">
-            <span>Language:</span>
-            <span className="rounded-card border border-glass-border bg-glass-bg px-2 py-1 font-semibold text-amber">
-              EN
-            </span>
-            <span className="rounded-card border border-glass-border px-2 py-1 font-semibold text-warmgray">
-              ES
-            </span>
-          </div>
+          <p className="font-body text-xs text-warmgray">{t("copyright")}</p>
+          <LanguageSwitcher />
         </div>
       </div>
     </footer>

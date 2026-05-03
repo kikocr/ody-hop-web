@@ -1,24 +1,26 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
-const NAV_LINKS = [
-  { href: "/destinations", label: "Destinations" },
-  { href: "/operators", label: "For Guides" },
-  { href: "/about", label: "About" },
-  { href: "/download", label: "Download" },
-] as const;
+const NAV_KEYS = [
+  { href: "/destinations" as const, key: "destinations" },
+  { href: "/operators" as const, key: "forGuides" },
+  { href: "/about" as const, key: "about" },
+  { href: "/download" as const, key: "download" },
+];
 
 function cn(...parts: Array<string | undefined | false | null>): string {
   return parts.filter(Boolean).join(" ");
 }
 
 export function Header() {
+  const t = useTranslations("common");
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [lang, setLang] = useState<"EN" | "ES">("EN");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -64,22 +66,22 @@ export function Header() {
             aria-label="Primary"
             className="hidden items-center gap-8 lg:flex"
           >
-            {NAV_LINKS.map((link) => (
+            {NAV_KEYS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className="font-body text-sm font-medium text-white/90 transition-colors hover:text-amber"
               >
-                {link.label}
+                {t(link.key)}
               </Link>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            <LanguageSwitcher lang={lang} onChange={setLang} />
+            <LanguageSwitcher className="hidden sm:inline-flex" />
             <div className="hidden sm:block">
               <Button href="/download" variant="primary" size="md">
-                Download App
+                {t("downloadApp")}
               </Button>
             </div>
             <button
@@ -98,65 +100,20 @@ export function Header() {
 
       <div className="h-16 sm:h-20" aria-hidden />
 
-      <MobileMenu
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        lang={lang}
-        onLangChange={setLang}
-      />
+      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </>
-  );
-}
-
-function LanguageSwitcher({
-  lang,
-  onChange,
-  className,
-}: {
-  lang: "EN" | "ES";
-  onChange: (next: "EN" | "ES") => void;
-  className?: string;
-}) {
-  return (
-    <div
-      role="group"
-      aria-label="Language"
-      className={cn(
-        "hidden items-center gap-1 rounded-card border border-glass-border bg-glass-bg px-1 py-1 text-xs font-semibold sm:flex",
-        className
-      )}
-    >
-      {(["EN", "ES"] as const).map((option) => (
-        <button
-          key={option}
-          type="button"
-          onClick={() => onChange(option)}
-          aria-pressed={lang === option}
-          className={cn(
-            "rounded-card px-2 py-1 transition-colors",
-            lang === option
-              ? "bg-amber text-ocean"
-              : "text-warmgray hover:text-white"
-          )}
-        >
-          {option}
-        </button>
-      ))}
-    </div>
   );
 }
 
 function MobileMenu({
   open,
   onClose,
-  lang,
-  onLangChange,
 }: {
   open: boolean;
   onClose: () => void;
-  lang: "EN" | "ES";
-  onLangChange: (next: "EN" | "ES") => void;
 }) {
+  const t = useTranslations("common");
+
   return (
     <>
       <div
@@ -193,14 +150,14 @@ function MobileMenu({
           </button>
         </div>
         <nav className="flex flex-col gap-1" aria-label="Mobile primary">
-          {NAV_LINKS.map((link) => (
+          {NAV_KEYS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={onClose}
               className="rounded-card px-3 py-3 font-body text-base font-medium text-white/90 transition-colors hover:bg-glass-bg hover:text-amber"
             >
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
         </nav>
@@ -209,14 +166,10 @@ function MobileMenu({
             <span className="font-body text-xs font-semibold uppercase tracking-widest text-warmgray">
               Language
             </span>
-            <LanguageSwitcher
-              lang={lang}
-              onChange={onLangChange}
-              className="!flex"
-            />
+            <LanguageSwitcher />
           </div>
           <Button href="/download" variant="primary" fullWidth>
-            Download App
+            {t("downloadApp")}
           </Button>
         </div>
       </aside>
