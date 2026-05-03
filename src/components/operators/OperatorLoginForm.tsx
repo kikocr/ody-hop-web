@@ -138,7 +138,7 @@ export function OperatorLoginForm() {
             width={36}
             height={36}
             priority
-            className="h-9 w-9 shrink-0"
+            className="h-9 w-9 shrink-0 rounded-lg"
           />
           <span>Ody Hop</span>
         </Link>

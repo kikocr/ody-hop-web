@@ -179,7 +179,7 @@ function DesktopSidebar({
           width={32}
           height={32}
           priority
-          className="h-8 w-8 shrink-0"
+          className="h-8 w-8 shrink-0 rounded-lg"
         />
         <span>Ody Hop</span>
       </Link>
@@ -404,7 +404,7 @@ function MobileTopBar({ onMenuOpen }: { onMenuOpen: () => void }) {
           alt=""
           width={28}
           height={28}
-          className="h-7 w-7 shrink-0"
+          className="h-7 w-7 shrink-0 rounded-lg"
         />
         <span>Ody Hop</span>
       </Link>
@@ -465,7 +465,7 @@ function MobileDrawer({
               alt=""
               width={28}
               height={28}
-              className="h-7 w-7 shrink-0"
+              className="h-7 w-7 shrink-0 rounded-lg"
             />
             <span>Ody Hop</span>
           </Link>

@@ -74,7 +74,7 @@ export function DashboardMockup() {
                 alt=""
                 width={20}
                 height={20}
-                className="h-5 w-5 shrink-0"
+                className="h-5 w-5 shrink-0 rounded-lg"
               />
               Ody Hop
             </span>

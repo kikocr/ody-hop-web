@@ -59,7 +59,7 @@ export async function Footer() {
                 alt=""
                 width={32}
                 height={32}
-                className="h-8 w-8 shrink-0"
+                className="h-8 w-8 shrink-0 rounded-lg"
               />
               <span>Ody Hop</span>
             </Link>
