@@ -278,6 +278,194 @@ export const MOCK_REVIEWS: DashboardReview[] = [
       "Tough hike but absolutely worth it. The viewpoint at sunrise is something you remember forever.",
     created_at: "2026-04-12",
   },
+  {
+    id: "mock-r4",
+    tourist_name: "Hannah Becker",
+    badge_name: "Arenal Volcano Hike",
+    rating: 5,
+    comment:
+      "Beyond expectations. Carlos picked us up on time, kept the pace right for our group, and the stories about the volcano made every viewpoint feel earned.",
+    created_at: "2026-04-15",
+  },
+  {
+    id: "mock-r5",
+    tourist_name: "James Carter",
+    badge_name: "Manuel Antonio Wildlife",
+    rating: 5,
+    comment:
+      "Spotted three sloths and a family of capuchins within the first hour. Worth every cent.",
+    created_at: "2026-04-08",
+  },
+  {
+    id: "mock-r6",
+    tourist_name: "Sofía López",
+    badge_name: "Pacuare River Rafting",
+    rating: 5,
+    comment:
+      "Best day of our trip. Class IV rapids were thrilling, the river lunch was unreal, and our guide kept it safe and fun.",
+    created_at: "2026-04-02",
+  },
+  {
+    id: "mock-r7",
+    tourist_name: "Marco Rossi",
+    badge_name: "Monteverde Cloud Forest",
+    rating: 4,
+    comment:
+      "Beautiful walk. A little crowded on the bridges but our guide handled it well and pulled us aside for some quieter spots.",
+    created_at: "2026-03-28",
+  },
+  {
+    id: "mock-r8",
+    tourist_name: "Priya Kapoor",
+    badge_name: "Pacific Sunset",
+    rating: 5,
+    comment:
+      "Bonfire on the beach, fresh fish, marshmallows, and a sky full of stars. Magic.",
+    created_at: "2026-03-25",
+  },
+  {
+    id: "mock-r9",
+    tourist_name: "Mateo Álvarez",
+    badge_name: "Arenal Volcano Hike",
+    rating: 5,
+    comment:
+      "Carlos remembered we were celebrating an anniversary and made sure we got the best lookout to ourselves at sunset. That's the kind of detail you can't book online.",
+    created_at: "2026-03-21",
+  },
+  {
+    id: "mock-r10",
+    tourist_name: "Emma Wilson",
+    badge_name: "Sloth Spotter",
+    rating: 5,
+    comment:
+      "Saw four sloths and a hummingbird the size of a coin. Such a chill, well-paced morning.",
+    created_at: "2026-03-18",
+  },
+  {
+    id: "mock-r11",
+    tourist_name: "Thomas Chen",
+    badge_name: "Monteverde Cloud Forest",
+    rating: 5,
+    comment:
+      "Local knowledge made the whole thing — pointed out plants and birds we would never have noticed alone.",
+    created_at: "2026-03-15",
+  },
+  {
+    id: "mock-r12",
+    tourist_name: "Isabella García",
+    badge_name: "Pacific Sunset",
+    rating: 5,
+    comment:
+      "Perfect way to end our trip. Friendly, professional, and the food was incredible.",
+    created_at: "2026-03-10",
+  },
+  {
+    id: "mock-r13",
+    tourist_name: "Lukas Schäfer",
+    badge_name: "Arenal Volcano Hike",
+    rating: 3,
+    comment:
+      "The guide was great. Hike itself felt rushed because of group pace — would book again with a smaller group.",
+    created_at: "2026-03-05",
+  },
+  {
+    id: "mock-r14",
+    tourist_name: "Olivia Brown",
+    badge_name: "Manuel Antonio Wildlife",
+    rating: 4,
+    comment:
+      "Lovely time. Wished we had more notice that scopes were available — would have planned around them.",
+    created_at: "2026-02-28",
+  },
+];
+
+/* ---------------- Profile / billing ---------------- */
+
+export type FullProfile = {
+  id: string;
+  business_name: string;
+  bio: string;
+  photo_url: string | null;
+  contact_email: string;
+  phone: string;
+  destinations: DestinationSlug[];
+  regions: Partial<Record<DestinationSlug, string>>;
+  languages: string[];
+  specialties: string[];
+  certifications: string;
+  website: string;
+  social_instagram: string;
+  social_facebook: string;
+  social_tripadvisor: string;
+  rating: number;
+  review_count: number;
+  is_featured: boolean;
+};
+
+export const MOCK_PROFILE: FullProfile = {
+  id: "mock-guide-1",
+  business_name: "Pura Vida Tours",
+  bio: "Family-run guiding company based in La Fortuna, running Arenal volcano hikes, Pacuare rafting trips, and Monteverde cloud-forest walks since 2014. Every itinerary is custom — we keep groups small and local stories first.",
+  photo_url: null,
+  contact_email: "carlos@puravida-tours.cr",
+  phone: "+506 8888 1234",
+  destinations: ["costa-rica"],
+  regions: { "costa-rica": "Arenal, Monteverde, Manuel Antonio" },
+  languages: ["english", "spanish"],
+  specialties: ["wildlife", "adventure", "photography"],
+  certifications:
+    "ICT-certified guide (Costa Rica Tourism Board), Wilderness First Responder",
+  website: "https://puravida-tours.cr",
+  social_instagram: "@puravidatours",
+  social_facebook: "puravidatours",
+  social_tripadvisor: "puravidatours-cr",
+  rating: 4.9,
+  review_count: 211,
+  is_featured: true,
+};
+
+export type Payout = {
+  id: string;
+  date: string;
+  amount: number;
+  currency: string;
+  method: string;
+  status: "paid" | "pending" | "scheduled";
+};
+
+export const MOCK_PAYOUTS: Payout[] = [
+  {
+    id: "p1",
+    date: "2026-04-30",
+    amount: 1840,
+    currency: "USD",
+    method: "Bank transfer",
+    status: "paid",
+  },
+  {
+    id: "p2",
+    date: "2026-03-31",
+    amount: 2120,
+    currency: "USD",
+    method: "Bank transfer",
+    status: "paid",
+  },
+  {
+    id: "p3",
+    date: "2026-02-28",
+    amount: 1530,
+    currency: "USD",
+    method: "Bank transfer",
+    status: "paid",
+  },
+  {
+    id: "p4",
+    date: "2026-05-31",
+    amount: 720,
+    currency: "USD",
+    method: "Bank transfer",
+    status: "scheduled",
+  },
 ];
 
 export const MOCK_STATS: DashboardStats = {
