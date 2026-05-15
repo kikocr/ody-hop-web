@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ody Hop — Architecture & Flows</title>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean: #0B1F3A;
+  --ocean-light: #122B4D;
+  --ocean-mid: #0E2444;
+  --amber: #F2A900;
+  --amber-dim: rgba(242, 169, 0, 0.15);
+  --amber-glow: rgba(242, 169, 0, 0.3);
+  --text: #E8ECF1;
+  --text-dim: #8A9BB5;
+  --text-muted: #5A6E87;
+  --glass: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.08);
+  --green: #52b788;
+  --red: #e63946;
+  --blue: #4EA8DE;
+  --purple: #b388ff;
+  --orange: #E8842A;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ocean);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  padding: 32px 40px 20px;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex; align-items: center; gap: 20px;
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(11, 31, 58, 0.92);
+  backdrop-filter: blur(20px);
+}
+.header .logo { font-family: 'Josefin Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--amber); letter-spacing: 1px; }
+.header .subtitle { color: var(--text-dim); font-size: 14px; margin-top: 2px; }
+.header .meta { margin-left: auto; text-align: right; font-size: 12px; color: var(--text-muted); }
+.header .meta span { color: var(--amber); }
+
+/* ── Tab Nav ── */
+.tab-nav {
+  display: flex; gap: 0; padding: 0 40px;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(11, 31, 58, 0.6);
+  position: sticky; top: 85px; z-index: 99;
+}
+.tab-btn {
+  padding: 14px 24px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-dim);
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* ── Sections ── */
+.section { display: none; padding: 40px; animation: fadeIn 0.3s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.section-title { font-family: 'Josefin Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
+.section-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 28px; max-width: 700px; line-height: 1.6; }
+
+/* ── Architecture Graph ── */
+.arch-container { position: relative; }
+.legend { display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim); }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+.graph-canvas {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(242, 169, 0, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(78, 168, 222, 0.03) 0%, transparent 50%),
+    var(--ocean);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  overflow: auto;
+  padding: 30px;
+}
+
+/* ── Node grid layout ── */
+.layer-row {
+  display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; flex-wrap: wrap;
+}
+.layer-label {
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase;
+  padding: 8px 4px; min-width: 28px;
+  border-right: 1px solid var(--glass-border);
+  margin-right: 8px;
+}
+.node {
+  background: var(--glass);
+  border: 1.5px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  min-width: 150px;
+  max-width: 200px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+}
+.node:hover { border-color: var(--amber); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(242,169,0,0.1); }
+.node.highlighted { border-color: var(--amber); background: var(--amber-dim); box-shadow: 0 0 20px rgba(242,169,0,0.15); }
+.node-title { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.node-sub { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+.node-tag {
+  position: absolute; top: -8px; right: -4px;
+  font-size: 9px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Node colors */
+.node-client { border-left: 3px solid var(--amber); }
+.node-client .node-tag { background: var(--amber); color: var(--ocean); }
+.node-backend { border-left: 3px solid var(--green); }
+.node-backend .node-tag { background: var(--green); color: var(--ocean); }
+.node-storage { border-left: 3px solid var(--blue); }
+.node-storage .node-tag { background: var(--blue); color: var(--ocean); }
+.node-external { border-left: 3px solid var(--purple); }
+.node-external .node-tag { background: var(--purple); color: var(--ocean); }
+.node-build { border-left: 3px solid var(--orange); }
+.node-build .node-tag { background: var(--orange); color: var(--ocean); }
+
+/* ── Flows sidebar ── */
+.arch-layout { display: flex; gap: 24px; }
+.arch-main { flex: 1; min-width: 0; }
+.flows-panel {
+  width: 300px; flex-shrink: 0;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-height: 640px; overflow-y: auto;
+  position: sticky; top: 160px;
+}
+.flows-title { font-family: 'Josefin Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--amber); margin-bottom: 16px; }
+.flow-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.flow-item:hover { background: var(--amber-dim); border-color: var(--glass-border); }
+.flow-item.active { background: var(--amber-dim); border-color: var(--amber); }
+.flow-item .flow-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.flow-item .flow-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+.flow-steps {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--glass-border);
+}
+.flow-step {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 6px 0; font-size: 12px; color: var(--text-dim);
+}
+.flow-step-num {
+  background: var(--amber); color: var(--ocean);
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+/* ── Tech Stack Grid ── */
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.stack-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s;
+}
+.stack-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+.stack-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.stack-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.stack-card-title { font-family: 'Josefin Sans', sans-serif; font-size: 16px; font-weight: 700; }
+.stack-card-body { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.stack-card-body code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(242,169,0,0.1);
+  color: var(--amber);
+  padding: 2px 6px; border-radius: 4px; font-size: 12px;
+}
+.stack-card-body .lib-tag {
+  display: inline-block; padding: 3px 10px; margin: 3px 4px 3px 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px; font-size: 11px; color: var(--text-dim);
+}
+
+/* ── Schema Table ── */
+.schema-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; }
+.schema-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.schema-card-header {
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.schema-card-header h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px; color: var(--amber);
+}
+.schema-card-header .row-est { font-size: 11px; color: var(--text-muted); }
+.schema-cols { padding: 12px 20px; }
+.schema-col {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.schema-col:last-child { border-bottom: none; }
+.col-name { color: var(--text); min-width: 140px; }
+.col-type { color: var(--text-muted); font-size: 11px; }
+.col-pk { color: var(--amber); font-size: 10px; font-weight: 600; background: var(--amber-dim); padding: 1px 6px; border-radius: 4px; }
+.col-fk { color: var(--blue); font-size: 10px; font-weight: 600; background: rgba(78,168,222,0.15); padding: 1px 6px; border-radius: 4px; }
+
+/* ── Decisions ── */
+.decisions-list { display: flex; flex-direction: column; gap: 16px; max-width: 900px; }
+.decision-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px;
+  border-left: 3px solid var(--amber);
+}
+.decision-q { font-family: 'Josefin Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.decision-a { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.decision-a strong { color: var(--amber); font-weight: 600; }
+.decision-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.decision-tag {
+  font-size: 10px; padding: 3px 10px; border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.stat-chip {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  text-align: center;
+}
+.stat-val { font-family: 'Josefin Sans', sans-serif; font-size: 24px; font-weight: 700; color: var(--amber); }
+.stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── Node detail popup ── */
+.node-detail-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  align-items: center; justify-content: center;
+}
+.node-detail-overlay.show { display: flex; }
+.node-detail {
+  background: var(--ocean-light);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px; width: 90%;
+  animation: fadeIn 0.2s ease;
+}
+.node-detail h3 { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--amber); margin-bottom: 12px; }
+.node-detail p { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+.node-detail .close-btn {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; color: var(--text-dim);
+  font-size: 20px; cursor: pointer;
+}
+.node-detail .file-ref {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--amber); background: var(--amber-dim);
+  padding: 4px 10px; border-radius: 6px; display: inline-block; margin-top: 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .arch-layout { flex-direction: column; }
+  .flows-panel { width: 100%; position: static; max-height: none; }
+  .header { padding: 20px; flex-wrap: wrap; }
+  .tab-nav { overflow-x: auto; padding: 0 20px; }
+  .section { padding: 20px; }
+  .stats-bar { gap: 8px; }
+  .stat-chip { flex: 1; min-width: 80px; padding: 10px; }
+  .stat-val { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="logo">🦦 ODY HOP</div>
+    <div class="subtitle">System Architecture & Technical Reference</div>
+  </div>
+  <div class="meta">
+    <div>Last updated: <span>May 2026</span></div>
+    <div>Repo: <span>kikocr/pura-vida-quest</span></div>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('architecture')">Architecture</button>
+  <button class="tab-btn" onclick="switchTab('techstack')">Tech Stack</button>
+  <button class="tab-btn" onclick="switchTab('schema')">Database</button>
+  <button class="tab-btn" onclick="switchTab('decisions')">Decisions</button>
+  <button class="tab-btn" onclick="switchTab('destinations')">Destinations</button>
+</div>
+
+<!-- ═══════════════════════════════════ ARCHITECTURE ═══════════════════════════════════ -->
+<div id="architecture" class="section active">
+  <div class="section-title">Architecture & Flows</div>
+  <div class="section-desc">
+    Every package and service that powers Ody Hop's mobile app and website.
+    Pick a flow on the right to highlight the path through the system.
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-chip"><div class="stat-val">590</div><div class="stat-label">Badges</div></div>
+    <div class="stat-chip"><div class="stat-val">6</div><div class="stat-label">Destinations</div></div>
+    <div class="stat-chip"><div class="stat-val">22</div><div class="stat-label">Screens</div></div>
+    <div class="stat-chip"><div class="stat-val">27</div><div class="stat-label">Tickets Shipped</div></div>
+    <div class="stat-chip"><div class="stat-val">2</div><div class="stat-label">Platforms</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Client / UI</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Backend / Functions</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Storage / Data</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>External Service</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Build / Deploy</div>
+  </div>
+
+  <div class="arch-layout">
+    <div class="arch-main">
+      <div class="graph-canvas" id="graphCanvas">
+
+        <!-- LAYER: Client Surfaces -->
+        <div class="layer-row">
+          <div class="layer-label">CLIENTS</div>
+          <div class="node node-client" data-id="mobile" onclick="showDetail('mobile')">
+            <span class="node-tag">client</span>
+            <div class="node-title">📱 Mobile App</div>
+            <div class="node-sub">React Native (Expo SDK 54)<br>Tourist + Operator modes</div>
+          </div>
+          <div class="node node-client" data-id="website" onclick="showDetail('website')">
+            <span class="node-tag">client</span>
+            <div class="node-title">🌐 Website</div>
+            <div class="node-sub">Next.js 14 App Router<br>odyhop.com — SSR/SSG</div>
+          </div>
+          <div class="node node-client" data-id="admin" onclick="showDetail('admin')">
+            <span class="node-tag">client</span>
+            <div class="node-title">⚙️ Admin Panel</div>
+            <div class="node-sub">Supabase Studio + Future<br>Next.js dashboard</div>
+          </div>
+        </div>
+
+        <!-- LAYER: Client Libraries -->
+        <div class="layer-row">
+          <div class="layer-label">CLIENT LIBS</div>
+          <div class="node node-client" data-id="navigation" onclick="showDetail('navigation')">
+            <span class="node-tag">client</span>
+            <div class="node-title">🧭 Navigation</div>
+            <div class="node-sub">React Navigation<br>Stack + Tab navigators</div>
+          </div>
+          <div class="node node-client" data-id="zustand" onclick="showDetail('zustand')">
+            <span class="node-tag">client</span>
+            <div class="node-title">🗃️ State</div>
+            <div class="node-sub">Zustand + AsyncStorage<br>Persisted app state</div>
+          </div>
+          <div class="node node-client" data-id="destloader" onclick="showDetail('destloader')">
+            <span class="node-tag">client</span>
+            <div class="node-title">🌍 Destination Loader</div>
+            <div class="node-sub">destination-loader.ts<br>Dynamic country data swap</div>
+          </div>
+          <div class="node node-client" data-id="camera" onclick="showDetail('camera')">
+            <span class="node-tag">client</span>
+            <div class="node-title">📸 Camera + GPS</div>
+            <div class="node-sub">expo-camera, expo-location<br>Badge claim verification</div>
+          </div>
+          <div class="node node-client" data-id="maps" onclick="showDetail('maps')">
+            <span class="node-tag">client</span>
+            <div class="node-title">🗺️ Maps</div>
+            <div class="node-sub">react-native-maps<br>Badge pins + near-me</div>
+          </div>
+        </div>
+
+        <!-- LAYER: Auth & Functions -->
+        <div class="layer-row">
+          <div class="layer-label">AUTH & LOGIC</div>
+          <div class="node node-backend" data-id="auth" onclick="showDetail('auth')">
+            <span class="node-tag">backend</span>
+            <div class="node-title">🔐 Supabase Auth</div>
+            <div class="node-sub">Email + Google + Apple<br>Shared mobile ↔ web</div>
+          </div>
+          <div class="node node-backend" data-id="edgefn" onclick="showDetail('edgefn')">
+            <span class="node-tag">backend</span>
+            <div class="node-title">⚡ Edge Functions</div>
+            <div class="node-sub">Claim verification<br>Booking notifications</div>
+          </div>
+          <div class="node node-backend" data-id="rls" onclick="showDetail('rls')">
+            <span class="node-tag">backend</span>
+            <div class="node-title">🛡️ RLS Policies</div>
+            <div class="node-sub">Row-level security<br>Per-user data isolation</div>
+          </div>
+          <div class="node node-backend" data-id="realtime" onclick="showDetail('realtime')">
+            <span class="node-tag">backend</span>
+            <div class="node-title">📡 Realtime</div>
+            <div class="node-sub">Supabase Realtime<br>Live leaderboard</div>
+          </div>
+        </div>
+
+        <!-- LAYER: Storage & Data -->
+        <div class="layer-row">
+          <div class="layer-label">STORAGE</div>
+          <div class="node node-storage" data-id="postgres" onclick="showDetail('postgres')">
+            <span class="node-tag">storage</span>
+            <div class="node-title">🐘 PostgreSQL</div>
+            <div class="node-sub">Supabase managed<br>profiles, badges, claims,<br>guides, bookings, reviews</div>
+          </div>
+          <div class="node node-storage" data-id="s3" onclick="showDetail('s3')">
+            <span class="node-tag">storage</span>
+            <div class="node-title">📦 Object Storage</div>
+            <div class="node-sub">Supabase Storage<br>badge-images, claims,<br>operator-applications</div>
+          </div>
+          <div class="node node-storage" data-id="localdata" onclick="showDetail('localdata')">
+            <span class="node-tag">storage</span>
+            <div class="node-title">💾 Local Data</div>
+            <div class="node-sub">src/data/{destination}/<br>Badges, regions, slang,<br>guides per country</div>
+          </div>
+        </div>
+
+        <!-- LAYER: External Services -->
+        <div class="layer-row">
+          <div class="layer-label">EXTERNAL</div>
+          <div class="node node-external" data-id="stripe" onclick="showDetail('stripe')">
+            <span class="node-tag">external</span>
+            <div class="node-title">💳 Stripe</div>
+            <div class="node-sub">Premium tier $4.99/trip<br>Operator billing + 15%</div>
+          </div>
+          <div class="node node-external" data-id="grok" onclick="showDetail('grok')">
+            <span class="node-tag">external</span>
+            <div class="node-title">🎙️ Grok Voice API</div>
+            <div class="node-sub">WebSocket real-time<br>Bidirectional translator</div>
+          </div>
+          <div class="node node-external" data-id="google" onclick="showDetail('google')">
+            <span class="node-tag">external</span>
+            <div class="node-title">📍 Google Places</div>
+            <div class="node-sub">Map tiles + Places API<br>Location autocomplete</div>
+          </div>
+          <div class="node node-external" data-id="vercel" onclick="showDetail('vercel')">
+            <span class="node-tag">external</span>
+            <div class="node-title">▲ Vercel</div>
+            <div class="node-sub">Website hosting<br>SSR + Edge</div>
+          </div>
+          <div class="node node-external" data-id="apns" onclick="showDetail('apns')">
+            <span class="node-tag">external</span>
+            <div class="node-title">🔔 Push (APNs/FCM)</div>
+            <div class="node-sub">expo-notifications<br>Booking + claim alerts</div>
+          </div>
+        </div>
+
+        <!-- LAYER: Build Pipeline -->
+        <div class="layer-row">
+          <div class="layer-label">BUILD</div>
+          <div class="node node-build" data-id="eas" onclick="showDetail('eas')">
+            <span class="node-tag">build</span>
+            <div class="node-title">🔨 EAS Build</div>
+            <div class="node-sub">Expo Application Services<br>iOS + Android builds</div>
+          </div>
+          <div class="node node-build" data-id="github" onclick="showDetail('github')">
+            <span class="node-tag">build</span>
+            <div class="node-title">🐙 GitHub</div>
+            <div class="node-sub">kikocr/pura-vida-quest<br>main branch, [OdyHop] prefix</div>
+          </div>
+          <div class="node node-build" data-id="testflight" onclick="showDetail('testflight')">
+            <span class="node-tag">build</span>
+            <div class="node-title">✈️ TestFlight</div>
+            <div class="node-sub">iOS beta distribution<br>Active testers</div>
+          </div>
+          <div class="node node-build" data-id="appstore" onclick="showDetail('appstore')">
+            <span class="node-tag">build</span>
+            <div class="node-title">🍎 App Store</div>
+            <div class="node-sub">iOS distribution<br>+ Google Play</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FLOWS SIDEBAR -->
+    <div class="flows-panel">
+      <div class="flows-title">FLOWS</div>
+      <div id="flowsList"></div>
+      <div id="flowSteps" class="flow-steps" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TECH STACK ═══════════════════════════════════ -->
+<div id="techstack" class="section">
+  <div class="section-title">Tech Stack</div>
+  <div class="section-desc">Every library and service powering Ody Hop, with version info and rationale.</div>
+
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:var(--amber-dim); color:var(--amber);">⚛️</div>
+        <div class="stack-card-title">React Native + Expo</div>
+      </div>
+      <div class="stack-card-body">
+        <code>Expo SDK 54</code> managed workflow. Single codebase → iOS + Android.
+        Expo handles OTA updates, camera, location, image picker, and notifications
+        without ejecting. TypeScript strict mode enforced everywhere.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">expo-camera</span>
+          <span class="lib-tag">expo-location</span>
+          <span class="lib-tag">expo-image-picker</span>
+          <span class="lib-tag">expo-image</span>
+          <span class="lib-tag">expo-notifications</span>
+          <span class="lib-tag">expo-sharing</span>
+          <span class="lib-tag">expo-blur</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(82,183,136,0.15); color:var(--green);">🔌</div>
+        <div class="stack-card-title">Supabase</div>
+      </div>
+      <div class="stack-card-body">
+        Full backend: <code>PostgreSQL</code> database, <code>Auth</code> (email + OAuth),
+        <code>Storage</code> (S3-compatible), <code>Edge Functions</code> (Deno),
+        <code>Realtime</code> (WebSocket subscriptions). Single instance shared by mobile app + website.
+        Row-Level Security enforces per-user data isolation.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">@supabase/supabase-js</span>
+          <span class="lib-tag">@supabase/ssr</span>
+          <span class="lib-tag">RLS policies</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(78,168,222,0.15); color:var(--blue);">🧭</div>
+        <div class="stack-card-title">Navigation</div>
+      </div>
+      <div class="stack-card-body">
+        <code>React Navigation</code> — stack + bottom tab navigators. Tourist and Operator
+        get separate tab navigators with complete route isolation. All push targets registered at
+        RootStack level (no per-tab stacks) — any screen reachable from any tab.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">@react-navigation/native</span>
+          <span class="lib-tag">@react-navigation/stack</span>
+          <span class="lib-tag">@react-navigation/bottom-tabs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(179,136,255,0.15); color:var(--purple);">🗃️</div>
+        <div class="stack-card-title">State Management</div>
+      </div>
+      <div class="stack-card-body">
+        <code>Zustand</code> with <code>AsyncStorage</code> persistence. Single store
+        (<code>useAppStore</code>) manages activeDestination, earnedBadges, claimTimestamps,
+        user profile, questProgress, streak, and onboarding gates.
+        Activity feed module reconstructs timelines from store on demand — no separate event log.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">zustand</span>
+          <span class="lib-tag">@react-native-async-storage</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(232,132,42,0.15); color:var(--orange);">🗺️</div>
+        <div class="stack-card-title">Maps & Location</div>
+      </div>
+      <div class="stack-card-body">
+        <code>react-native-maps</code> with dark tile style. 590 custom badge pins color-coded by
+        category. Callout popups, category filter chips, near-me FAB with
+        <code>animateToRegion</code>. Haversine formula in <code>src/lib/location.ts</code>
+        for GPS proximity verification on claim.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">react-native-maps</span>
+          <span class="lib-tag">Google Places API</span>
+          <span class="lib-tag">expo-location</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(230,57,70,0.15); color:var(--red);">🎙️</div>
+        <div class="stack-card-title">Grok Voice Translator</div>
+      </div>
+      <div class="stack-card-body">
+        Bidirectional real-time voice translation via <code>Grok Voice Agent API</code>.
+        WebSocket to <code>wss://api.x.ai/v1/realtime</code>. Ephemeral token auth via
+        POST to <code>/v1/realtime/client_secrets</code>. PCM16 24kHz push-to-talk.
+        Per-destination slang banks (21–23 expressions). System prompt must start with
+        "ONLY translate, NEVER answer questions".
+        <div style="margin-top:10px;">
+          <span class="lib-tag">WebSocket</span>
+          <span class="lib-tag">PCM16 audio</span>
+          <span class="lib-tag">xai-client-secret subprotocol</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:var(--amber-dim); color:var(--amber);">💳</div>
+        <div class="stack-card-title">Payments</div>
+      </div>
+      <div class="stack-card-body">
+        <code>Stripe</code> for premium tier checkout ($4.99/trip) and operator billing (15% booking commission).
+        Currently simulated in MVP. Integration via <code>@stripe/stripe-react-native</code>.
+        Paywall screen gates offline maps, trip analytics, priority prizes, and voice translator.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">@stripe/stripe-react-native</span>
+          <span class="lib-tag">Stripe Checkout</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(78,168,222,0.15); color:var(--blue);">🌐</div>
+        <div class="stack-card-title">Website</div>
+      </div>
+      <div class="stack-card-body">
+        <code>Next.js 14+</code> App Router on <code>Vercel</code>. Tailwind CSS, TypeScript.
+        <code>next-intl</code> for EN/ES i18n (442 keys each). Connects to the same Supabase instance —
+        shared auth, shared profiles/guides tables. Operator dashboard for managing listings and bookings.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">Next.js 14</span>
+          <span class="lib-tag">Tailwind CSS</span>
+          <span class="lib-tag">next-intl</span>
+          <span class="lib-tag">Vercel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(232,132,42,0.15); color:var(--orange);">🎨</div>
+        <div class="stack-card-title">Design System</div>
+      </div>
+      <div class="stack-card-body">
+        Dark theme: <code>#0B1F3A</code> ocean blue base + <code>#F2A900</code> amber gold as the sole
+        action color. Typography: <code>Josefin Sans</code> (display) + <code>Inter</code> (body).
+        Glassmorphism cards via <code>expo-blur</code>. Five-tier otter avatar system.
+        Illustrated badge rarity frames. Per-destination accent colors exist in config but are intentionally unused in UI.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">Josefin Sans</span>
+          <span class="lib-tag">Inter</span>
+          <span class="lib-tag">expo-blur</span>
+          <span class="lib-tag">react-native-reanimated</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(82,183,136,0.15); color:var(--green);">🔨</div>
+        <div class="stack-card-title">Build & Deploy</div>
+      </div>
+      <div class="stack-card-body">
+        <code>EAS Build</code> for native iOS/Android binaries. <code>EAS Submit</code> for App Store / Play Store.
+        GitHub repo at <code>kikocr/pura-vida-quest</code> (mobile) and <code>kikocr/ody-hop-web</code> (website).
+        All commits use <code>[OdyHop]</code> prefix. Git identity: Kiko / kikocr@gmail.com.
+        Claude Code executes tickets autonomously with <code>--dangerously-skip-permissions</code>.
+        <div style="margin-top:10px;">
+          <span class="lib-tag">EAS Build</span>
+          <span class="lib-tag">EAS Submit</span>
+          <span class="lib-tag">TestFlight</span>
+          <span class="lib-tag">GitHub</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ DATABASE ═══════════════════════════════════ -->
+<div id="schema" class="section">
+  <div class="section-title">Database Schema</div>
+  <div class="section-desc">Supabase PostgreSQL tables. Single instance shared by mobile app and website. RLS enforces per-user data isolation.</div>
+
+  <div class="schema-grid">
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>profiles</h3><span class="row-est">Extends auth.users</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid → auth.users</span></div>
+        <div class="schema-col"><span class="col-name">display_name</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">avatar_url</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">account_type</span><span class="col-type">text DEFAULT 'tourist'</span></div>
+        <div class="schema-col"><span class="col-name">country</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">trip_start / trip_end</span><span class="col-type">date</span></div>
+        <div class="schema-col"><span class="col-name">total_points</span><span class="col-type">int DEFAULT 0</span></div>
+        <div class="schema-col"><span class="col-name">total_badges</span><span class="col-type">int DEFAULT 0</span></div>
+        <div class="schema-col"><span class="col-name">tier</span><span class="col-type">text DEFAULT 'free'</span></div>
+        <div class="schema-col"><span class="col-name">stripe_customer_id</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">subscription_status</span><span class="col-type">text DEFAULT 'none'</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>badges</h3><span class="row-est">590 rows (seeded)</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">text — e.g. 'arenal-gazer'</span></div>
+        <div class="schema-col"><span class="col-name">name</span><span class="col-type">text NOT NULL</span></div>
+        <div class="schema-col"><span class="col-name">category</span><span class="col-type">text — 7 categories</span></div>
+        <div class="schema-col"><span class="col-name">points</span><span class="col-type">int NOT NULL</span></div>
+        <div class="schema-col"><span class="col-name">difficulty</span><span class="col-type">text — 5 levels</span></div>
+        <div class="schema-col"><span class="col-name">region</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">latitude / longitude</span><span class="col-type">float</span></div>
+        <div class="schema-col"><span class="col-name">radius_meters</span><span class="col-type">int DEFAULT 500</span></div>
+        <div class="schema-col"><span class="col-name">reference_image_url</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">is_sponsored</span><span class="col-type">boolean</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">sponsor_id</span><span class="col-type">uuid → guides</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>claims</h3><span class="row-est">User badge claims</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">user_id</span><span class="col-type">uuid → profiles</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">badge_id</span><span class="col-type">text → badges</span></div>
+        <div class="schema-col"><span class="col-name">photo_url</span><span class="col-type">text NOT NULL</span></div>
+        <div class="schema-col"><span class="col-name">latitude / longitude</span><span class="col-type">float NOT NULL</span></div>
+        <div class="schema-col"><span class="col-name">verified</span><span class="col-type">boolean DEFAULT false</span></div>
+        <div class="schema-col"><span class="col-name">verification_method</span><span class="col-type">text — auto_gps | manual | ai</span></div>
+        <div class="schema-col"><span class="col-name">points_awarded</span><span class="col-type">int</span></div>
+        <div class="schema-col"><span class="col-name">flagged</span><span class="col-type">boolean</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>guides</h3><span class="row-est">Tour operators</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">user_id</span><span class="col-type">uuid → auth.users</span></div>
+        <div class="schema-col"><span class="col-name">business_name</span><span class="col-type">text NOT NULL</span></div>
+        <div class="schema-col"><span class="col-name">contact_name</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">rating</span><span class="col-type">float DEFAULT 0</span></div>
+        <div class="schema-col"><span class="col-name">verified</span><span class="col-type">boolean</span></div>
+        <div class="schema-col"><span class="col-name">tier</span><span class="col-type">text — free | featured</span></div>
+        <div class="schema-col"><span class="col-name">commission_rate</span><span class="col-type">float DEFAULT 0.15</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>guide_badges</h3><span class="row-est">Guide ↔ Badge mapping</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">guide_id</span><span class="col-type">uuid → guides</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">badge_id</span><span class="col-type">text → badges</span></div>
+        <div class="schema-col"><span class="col-name">offer_title</span><span class="col-type">text NOT NULL</span></div>
+        <div class="schema-col"><span class="col-name">price</span><span class="col-type">float</span></div>
+        <div class="schema-col"><span class="col-name">is_featured</span><span class="col-type">boolean</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>bookings</h3><span class="row-est">Tourist → Guide</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">tourist_id</span><span class="col-type">uuid → profiles</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">guide_id</span><span class="col-type">uuid → guides</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">guide_badge_id</span><span class="col-type">uuid → guide_badges</span></div>
+        <div class="schema-col"><span class="col-name">status</span><span class="col-type">text — pending | confirmed | completed | cancelled</span></div>
+        <div class="schema-col"><span class="col-name">date / party_size</span><span class="col-type">date / int</span></div>
+        <div class="schema-col"><span class="col-name">total_price</span><span class="col-type">float</span></div>
+        <div class="schema-col"><span class="col-name">commission_amount</span><span class="col-type">float</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>reviews</h3><span class="row-est">Post-booking reviews</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">booking_id</span><span class="col-type">uuid → bookings</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">tourist_id</span><span class="col-type">uuid → profiles</span></div>
+        <div class="schema-col"><span class="col-fk">FK</span><span class="col-name">guide_id</span><span class="col-type">uuid → guides</span></div>
+        <div class="schema-col"><span class="col-name">rating</span><span class="col-type">int 1–5</span></div>
+        <div class="schema-col"><span class="col-name">comment</span><span class="col-type">text</span></div>
+      </div>
+    </div>
+
+    <div class="schema-card">
+      <div class="schema-card-header">
+        <h3>operator_applications</h3><span class="row-est">Website form submissions</span>
+      </div>
+      <div class="schema-cols">
+        <div class="schema-col"><span class="col-pk">PK</span><span class="col-name">id</span><span class="col-type">uuid</span></div>
+        <div class="schema-col"><span class="col-name">business_name</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">email / phone</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">destinations</span><span class="col-type">text[] — multi-select</span></div>
+        <div class="schema-col"><span class="col-name">status</span><span class="col-type">text — pending | approved | rejected</span></div>
+        <div class="schema-col"><span class="col-name">admin_notes</span><span class="col-type">text</span></div>
+        <div class="schema-col"><span class="col-name">reviewed_by</span><span class="col-type">uuid</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ DECISIONS ═══════════════════════════════════ -->
+<div id="decisions" class="section">
+  <div class="section-title">Architecture Decisions</div>
+  <div class="section-desc">Key technical choices and why they were made — institutional knowledge preserved for future developers and Claude Code sessions.</div>
+
+  <div class="decisions-list">
+    <div class="decision-card">
+      <div class="decision-q">Why Expo managed workflow over bare React Native?</div>
+      <div class="decision-a">
+        Non-technical founder using Claude Code for autonomous development. Expo's managed workflow
+        eliminates native build configuration, provides OTA updates, and bundles camera/location/notifications
+        without ejecting. <strong>EAS Build</strong> handles the native compilation in the cloud.
+        Trade-off: can't use arbitrary native modules, but Expo's ecosystem covers all current needs.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">dx</span><span class="decision-tag">build</span><span class="decision-tag">foundational</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why Supabase over Firebase?</div>
+      <div class="decision-a">
+        PostgreSQL with real SQL (complex leaderboard queries, JOINs across badges/claims/guides),
+        <strong>Row-Level Security</strong> for per-user data isolation without custom backend code,
+        built-in Auth + Storage + Realtime + Edge Functions. Open source, no vendor lock-in.
+        Firebase's NoSQL would make the multi-table marketplace queries painful.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">backend</span><span class="decision-tag">data model</span><span class="decision-tag">foundational</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why one codebase, not per-destination apps?</div>
+      <div class="decision-a">
+        <strong>Multi-destination architecture</strong> is a core competitive advantage. Single codebase with
+        <code>destination-loader.ts</code> dynamically swaps badges/regions/slang/guides/map center per country.
+        Adding a new destination = add data files + config entry. No new app, no new deploy. This is how the
+        franchise model scales without engineering cost growing linearly.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">architecture</span><span class="decision-tag">scale</span><span class="decision-tag">competitive moat</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why Zustand + AsyncStorage over Redux or Context?</div>
+      <div class="decision-a">
+        Zustand: minimal boilerplate, built-in <strong>persist middleware</strong> for AsyncStorage,
+        no Provider wrapping, subscriptions are auto-optimized. Single <code>useAppStore</code> handles
+        activeDestination, earnedBadges, claimTimestamps, streak, quests, and onboarding gates.
+        Activity feed is reconstructed from store on demand — no separate event log to maintain.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">state</span><span class="decision-tag">dx</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why are destination accent colors vestigial?</div>
+      <div class="decision-a">
+        After the dark-theme redesign, <strong>amber gold (#F2A900)</strong> became the sole action/highlight
+        color globally. Per-destination accent colors remain in config for potential future use, but the
+        redesign proved that destination identity is better carried by <strong>photography</strong> than by
+        color theming. Reintroducing per-destination tinting was explicitly rejected.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">design</span><span class="decision-tag">branding</span><span class="decision-tag">redesign</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why no per-tab stack navigators?</div>
+      <div class="decision-a">
+        Every push target (BadgeDetail, Claim, GuideProfile, Booking, etc.) is registered at the
+        <strong>RootStack level</strong>. This means any screen is reachable from any tab without
+        duplicating registrations. Simpler nav tree, fewer re-mount issues, easier deep linking.
+        Decided during the R5 redesign ticket and documented in commit.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">navigation</span><span class="decision-tag">architecture</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why Grok Voice API for translation?</div>
+      <div class="decision-a">
+        Real-time WebSocket streaming, low latency for push-to-talk UX. The system prompt approach
+        allows injecting <strong>per-destination slang banks</strong> (21–23 local expressions per country)
+        so translations feel culturally authentic. Critical lesson: "ONLY translate, NEVER answer questions"
+        must be the first line of the system prompt — Grok defaults to conversational behavior without it.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">voice</span><span class="decision-tag">ux</span><span class="decision-tag">lesson learned</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why shared Supabase instance between app and website?</div>
+      <div class="decision-a">
+        Operators must have <strong>bidirectional login</strong> — register on web, use on mobile, and vice versa.
+        Same Auth instance, same <code>profiles</code> and <code>guides</code> tables. The website's
+        operator registration writes to the same tables as the mobile app's <code>OperatorRegistrationScreen</code>.
+        No account duplication, no sync needed.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">backend</span><span class="decision-tag">auth</span><span class="decision-tag">marketplace</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Why local badge data files instead of API-first?</div>
+      <div class="decision-a">
+        Badge catalogs are <strong>seeded, admin-editable</strong> reference data that changes rarely.
+        Shipping them as local TypeScript files (<code>src/data/{destination}/badges.ts</code>) means
+        instant load, offline availability, and zero API calls for browsing. Supabase holds the
+        canonical copy for claims/leaderboard/booking queries.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">performance</span><span class="decision-tag">offline</span><span class="decision-tag">data strategy</span></div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-q">Yoga layout fix: ScrollView + percentage widths</div>
+      <div class="decision-a">
+        <strong>Hard-won lesson:</strong> never use percentage <code>width</code> + <code>aspectRatio</code>
+        in ScrollViews with no definite parent height — Yoga layout engine can't resolve the dimensions.
+        Always use <code>useWindowDimensions</code> to compute explicit pixel dimensions. Documented in
+        CLAUDE.md so every future Claude Code session avoids this trap.
+      </div>
+      <div class="decision-tags"><span class="decision-tag">bug fix</span><span class="decision-tag">react native</span><span class="decision-tag">lesson learned</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ DESTINATIONS ═══════════════════════════════════ -->
+<div id="destinations" class="section">
+  <div class="section-title">Destination Catalog</div>
+  <div class="section-desc">6 destinations built with 590 total badges. 16+ additional destinations researched with ~2,100 badges ready for data population.</div>
+
+  <div class="stack-grid">
+    <div class="stack-card" style="border-top: 3px solid #52b788;">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(82,183,136,0.15); font-size: 28px;">🇨🇷</div>
+        <div><div class="stack-card-title">Costa Rica</div><div style="font-size:12px; color:var(--text-dim);">Pura Vida Quest</div></div>
+      </div>
+      <div class="stack-card-body">
+        <strong style="color:var(--amber);">103 badges</strong> · 7 categories · Accent: #52b788<br>
+        Flagship destination. Full flow tested and working. Brother's operator network provides supply-side advantage. Regions: Central Valley, Pacific Coast, Caribbean, Arenal / La Fortuna, Osa Peninsula, Guanacaste, Monteverde.
+      </div>
+    </div>
+
+    <div class="stack-card" style="border-top: 3px solid #4EA8DE;">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(78,168,222,0.15); font-size: 28px;">🇮🇸</div>
+        <div><div class="stack-card-title">Iceland</div><div style="font-size:12px; color:var(--text-dim);">Fire & Ice</div></div>
+      </div>
+      <div class="stack-card-body">
+        <strong style="color:var(--amber);">100 badges</strong> · 7 categories · Accent: #4EA8DE<br>
+        Regions: Reykjavik, Golden Circle, South Coast, Snæfellsnes, Westfjords, North Iceland, East Fjords, Highlands.
+      </div>
+    </div>
+
+    <div class="stack-card" style="border-top: 3px solid #D62828;">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(214,40,40,0.15); font-size: 28px;">🇵🇪</div>
+        <div><div class="stack-card-title">Peru</div><div style="font-size:12px; color:var(--text-dim);">Inca Quest</div></div>
+      </div>
+      <div class="stack-card-body">
+        <strong style="color:var(--amber);">100 badges</strong> · 7 categories · Accent: #D62828<br>
+        Regions: Lima, Cusco / Sacred Valley, Machu Picchu, Arequipa, Lake Titicaca, Amazon Basin, Colca Canyon, Nazca.
+      </div>
+    </div>
+
+    <div class="stack-card" style="border-top: 3px solid #E8842A;">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(232,132,42,0.15); font-size: 28px;">🇹🇭</div>
+        <div><div class="stack-card-title">Thailand</div><div style="font-size:12px; color:var(--text-dim);">Sanuk Quest</div></div>
+      </div>
+      <div class="stack-card-body">
+        <strong style="color:var(--amber);">100 badges</strong> · 7 categories · Accent: #E8842A<br>
+        Regions: Bangkok, Chiang Mai, Chiang Rai, Southern Islands, Gulf Coast, Isan, Kanchanaburi, Sukhothai.
+      </div>
+    </div>
+
+    <div class="stack-card" style="border-top: 3px solid #006C35;">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(0,108,53,0.15); font-size: 28px;">🇸🇦</div>
+        <div><div class="stack-card-title">Saudi Arabia</div><div style="font-size:12px; color:var(--text-dim);">Yalla Arabia</div></div>
+      </div>
+      <div class="stack-card-body">
+        <strong style="color:var(--amber);">95 badges</strong> · 7 categories · Accent: #006C35<br>
+        Regions: Riyadh, Jeddah, AlUla, NEOM, Asir, Eastern Province, Medina, Tabuk.
+      </div>
+    </div>
+
+    <div class="stack-card" style="border-top: 3px solid #003F87;">
+      <div class="stack-card-header">
+        <div class="stack-icon" style="background:rgba(0,63,135,0.15); font-size: 28px;">🇺🇸</div>
+        <div><div class="stack-card-title">Alaska</div><div style="font-size:12px; color:var(--text-dim);">Last Frontier</div></div>
+      </div>
+      <div class="stack-card-body">
+        <strong style="color:var(--amber);">92 badges</strong> · 7 categories · Accent: #003F87<br>
+        Regions: Anchorage, Denali, Kenai Peninsula, Southeast (Inside Passage), Fairbanks, Kodiak, Valdez, Nome.
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <div class="section-title" style="font-size:18px;">Researched — Awaiting Data Population</div>
+    <div class="section-desc">Destination research files completed with badge catalogs, GPS coordinates, slang dictionaries, and cultural notes.</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇮🇹 Italy</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇳🇴 Norway</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇬🇹 Guatemala</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇲🇦 Morocco</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇳🇿 New Zealand</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇦🇺 Australia</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇮🇩 Bali</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇦🇷 Argentina</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇨🇱 Chile</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇧🇷 Brazil</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇺🇸 Hawaii</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇺🇸 Colorado</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇺🇸 California</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇮🇸 Iceland (expanded)</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇵🇪 Peru (expanded)</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇹🇭 Thailand (expanded)</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇺🇸 Alaska (expanded)</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇬🇷 Greece</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇫🇮 Finland</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇯🇵 Japan</span>
+      <span class="lib-tag" style="font-size:13px; padding: 6px 14px;">🇸🇦 Saudi Arabia (expanded)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ NODE DETAIL OVERLAY ═══════════════════════════════════ -->
+<div class="node-detail-overlay" id="nodeOverlay" onclick="if(event.target===this)closeDetail()">
+  <div class="node-detail" style="position:relative;">
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+    <h3 id="detailTitle"></h3>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<script>
+// ── Tab switching ──
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── Flows data ──
+const flows = [
+  {
+    name: "Tourist badge claim",
+    desc: "Tourist finds a badge, takes a photo at the location, earns points",
+    nodes: ["mobile", "camera", "maps", "destloader", "auth", "edgefn", "rls", "postgres", "s3"],
+    steps: [
+      "Tourist browses badges on HOME screen → taps a badge card",
+      "BadgeDetailScreen shows hero image, description, map pin, guides",
+      "Tourist taps 'Claim' → CameraCapture screen opens",
+      "expo-location checks GPS proximity (Haversine) against badge coords",
+      "expo-camera captures photo → uploaded to Supabase Storage (claims bucket)",
+      "Edge Function verifies: GPS ✓, photo exists ✓, not already claimed ✓",
+      "claims row inserted (verified: true, points_awarded: N)",
+      "profiles.total_points + total_badges incremented",
+      "Zustand store updated → badge appears in Profile trophy case"
+    ]
+  },
+  {
+    name: "Operator registration (web)",
+    desc: "Tour guide signs up on odyhop.com and is immediately usable on mobile",
+    nodes: ["website", "auth", "rls", "postgres", "s3"],
+    steps: [
+      "Operator visits odyhop.com/operators → clicks 'Apply Now'",
+      "Fills application form (business name, destinations, bio, photo)",
+      "Form submission → operator_applications table (status: pending)",
+      "Photo uploaded to operator-applications storage bucket",
+      "Admin reviews in Supabase Studio → approves",
+      "Auth user created, profiles row (account_type: operator), guides row inserted",
+      "Operator can immediately log in on mobile app → sees operator dashboard"
+    ]
+  },
+  {
+    name: "Booking flow",
+    desc: "Tourist books a guide from inside a badge card",
+    nodes: ["mobile", "destloader", "auth", "rls", "postgres", "stripe"],
+    steps: [
+      "Tourist views BadgeDetailScreen → expands guide panel",
+      "Sees verified guides with ratings, offers, prices",
+      "Taps 'Book Now' → BookingScreen with date picker + party size",
+      "Booking row created (status: pending, commission calculated at 15%)",
+      "Operator receives notification → confirms booking",
+      "Stripe processes payment (premium feature — simulated in MVP)",
+      "Post-trip: tourist leaves review → guides.rating updated"
+    ]
+  },
+  {
+    name: "Destination switching",
+    desc: "Tourist switches from Costa Rica to Iceland — entire app context swaps",
+    nodes: ["mobile", "destloader", "zustand", "localdata", "maps"],
+    steps: [
+      "Tourist taps 'Switch destination' from Profile or TripSetup",
+      "DestinationSelectorScreen shows 6 country cards",
+      "Tap Iceland → setActiveDestination('iceland') in Zustand store",
+      "destination-loader.ts loads Iceland badges, regions, slang, guides",
+      "useDestination() hook re-renders all consuming screens",
+      "Map recenters to Iceland (64.1°N, -21.9°W)",
+      "Translator slang bank, prize tiers, category descriptions all swap",
+      "If first visit to this destination → onboarding re-runs for Iceland"
+    ]
+  },
+  {
+    name: "Voice translation",
+    desc: "Tourist uses real-time voice translator with local slang",
+    nodes: ["mobile", "grok", "destloader", "localdata"],
+    steps: [
+      "Tourist opens Translator screen (premium-gated)",
+      "POST to /v1/realtime/client_secrets → ephemeral token",
+      "WebSocket opens to wss://api.x.ai/v1/realtime (subprotocol: xai-client-secret.{token})",
+      "System prompt injected with destination slang bank (21–23 expressions)",
+      "Tourist presses-to-talk → PCM16 24kHz audio streamed",
+      "Grok translates with cultural slang embedded",
+      "Split-screen UI: top half (rotated 180°) faces local person",
+      "Local person presses their side to respond → reverse translation"
+    ]
+  },
+  {
+    name: "Leaderboard query",
+    desc: "Real-time leaderboard with weekly/monthly/all-time periods",
+    nodes: ["mobile", "auth", "realtime", "postgres"],
+    steps: [
+      "LeaderboardScreen mounts → subscribes to Supabase Realtime",
+      "Initial query: SELECT profiles ranked by total_points with period filter",
+      "Top 3 rendered on animated podium (Reanimated, gold/silver/bronze)",
+      "Full rankings list shows 15 entries",
+      "Any new claim triggers Realtime update → re-renders",
+      "Sponsored prize card shown at bottom"
+    ]
+  },
+  {
+    name: "Build & ship",
+    desc: "Code → TestFlight → App Store pipeline",
+    nodes: ["github", "eas", "testflight", "appstore"],
+    steps: [
+      "Claude Code executes ticket → commits with [OdyHop] prefix",
+      "Push to origin main on kikocr/pura-vida-quest",
+      "npx eas-cli build --profile development --platform ios",
+      "EAS Build compiles native binary in the cloud",
+      "npx eas-cli submit --platform ios → TestFlight",
+      "Brother tests on TestFlight → feedback loop",
+      "Production build → App Store + Google Play submission"
+    ]
+  }
+];
+
+// ── Render flows list ──
+const flowsList = document.getElementById('flowsList');
+const flowSteps = document.getElementById('flowSteps');
+let activeFlow = null;
+
+flows.forEach((flow, i) => {
+  const div = document.createElement('div');
+  div.className = 'flow-item';
+  div.innerHTML = `<div class="flow-name">${flow.name}</div><div class="flow-desc">${flow.desc}</div>`;
+  div.onclick = () => selectFlow(i);
+  flowsList.appendChild(div);
+});
+
+function selectFlow(idx) {
+  // Toggle
+  if (activeFlow === idx) {
+    activeFlow = null;
+    document.querySelectorAll('.flow-item').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('highlighted'));
+    flowSteps.style.display = 'none';
+    return;
+  }
+
+  activeFlow = idx;
+  const flow = flows[idx];
+
+  // Highlight flow item
+  document.querySelectorAll('.flow-item').forEach(f => f.classList.remove('active'));
+  flowsList.children[idx].classList.add('active');
+
+  // Highlight nodes
+  document.querySelectorAll('.node').forEach(n => {
+    n.classList.toggle('highlighted', flow.nodes.includes(n.dataset.id));
+  });
+
+  // Show steps
+  flowSteps.style.display = 'block';
+  flowSteps.innerHTML = '<div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:10px;">STEPS</div>' +
+    flow.steps.map((s, i) =>
+      `<div class="flow-step"><div class="flow-step-num">${i+1}</div><div>${s}</div></div>`
+    ).join('');
+}
+
+// ── Node details ──
+const nodeDetails = {
+  mobile: { title: "📱 Mobile App", body: "<p>React Native (Expo SDK 54) with TypeScript strict mode. Single codebase serving iOS and Android. Two distinct modes: Tourist (5 tabs: HOME, MY TRIP, BOOKINGS, MORE, PROFILE) and Operator (4 tabs: Dashboard, Listings, Bookings, Profile) with complete route isolation.</p><p>22+ screens including onboarding, badge browsing, claiming, leaderboard, translator, map, booking, and profile management.</p>", file: "src/navigation/RootNavigator.tsx" },
+  website: { title: "🌐 Website (odyhop.com)", body: "<p>Next.js 14+ App Router on Vercel. Tailwind CSS + TypeScript. EN/ES internationalization via next-intl (442 keys each). Public pages for tourist discovery + SEO. Operator dashboard for managing listings and bookings. Connects to the same Supabase instance as mobile.</p>", file: "kikocr/ody-hop-web" },
+  admin: { title: "⚙️ Admin Panel", body: "<p>Currently using Supabase Studio for direct database management. Phase 2 will add a dedicated Next.js admin dashboard for operator approval, badge management, content moderation, and analytics.</p>", file: "Supabase Studio" },
+  navigation: { title: "🧭 React Navigation", body: "<p>Stack + bottom tab navigators. All push targets registered at RootStack level (no per-tab stacks). Tourist and Operator get separate TabNavigators with complete route isolation. Auth → Destination Selector → Onboarding → Main Tabs flow.</p>", file: "src/navigation/RootNavigator.tsx" },
+  zustand: { title: "🗃️ Zustand State Store", body: "<p>Single useAppStore manages: activeDestination, earnedBadges, claimTimestamps, user profile, questProgress, streak, dailyChallengeCompleted, onboarding gates (per-user per-destination). Persisted via AsyncStorage middleware. Activity feed module reconstructs timelines from store — no separate event log.</p>", file: "src/store/useAppStore.ts" },
+  destloader: { title: "🌍 Destination Loader", body: "<p>Pure-data module (no React Native imports). Holds DATA map for all 6 destinations. Exposes getDestinationBadges(id), getDestinationRegions(id), getDestinationSlang(id), getDestinationGuides(id). Falls back to Costa Rica for unknown IDs. Used by both React screens and Node scripts (e.g., Unsplash pipeline).</p>", file: "src/data/destination-loader.ts" },
+  camera: { title: "📸 Camera + GPS Verification", body: "<p>expo-camera for photo capture, expo-location for GPS verification. Haversine formula in location.ts calculates distance to badge coordinates. Configurable radius per badge (default 500m). 10-second GPS poll cycle. Out-of-range banner shown when too far.</p>", file: "src/lib/location.ts" },
+  maps: { title: "🗺️ Maps", body: "<p>react-native-maps with dark tile style. 590 custom badge pins color-coded by category. Category filter chips, earned counter pill, near-me FAB with animateToRegion. Map centers swap per destination via useDestination() hook.</p>", file: "src/screens/MapScreen.tsx" },
+  auth: { title: "🔐 Supabase Auth", body: "<p>Email + Google + Apple OAuth. Shared between mobile app and website. Registration asks 'Tourist' or 'Tour Operator' → account_type stored in profiles. On login, handleUserSync() fetches account_type, routes to correct tab navigator. Deep link callback: puravida://auth/callback.</p>", file: "src/lib/auth.ts" },
+  edgefn: { title: "⚡ Edge Functions", body: "<p>Supabase Edge Functions (Deno runtime). Handle claim verification (GPS check + duplicate prevention + points award), booking notifications, and future AI image check (Claude Vision API). Triggered by database events or direct invocation.</p>", file: "supabase/functions/" },
+  rls: { title: "🛡️ Row-Level Security", body: "<p>PostgreSQL RLS policies on every table. Users can only SELECT/UPDATE their own profiles. Claims visible to owner + admin. Guides publicly readable. Bookings visible to tourist + guide. operator_applications: public INSERT, owner SELECT, admin UPDATE.</p>", file: "supabase/rls-policies.sql" },
+  realtime: { title: "📡 Supabase Realtime", body: "<p>WebSocket subscriptions for live data. Currently used for leaderboard updates — any new claim triggers re-render. Future: live booking status updates, operator dashboard notifications.</p>", file: "src/lib/leaderboard.ts" },
+  postgres: { title: "🐘 PostgreSQL", body: "<p>Supabase-managed PostgreSQL. 8 core tables: profiles, badges (590 seeded rows), claims, guides, guide_badges, bookings, reviews, operator_applications. Complex queries for leaderboard rankings, marketplace search, booking analytics.</p>", file: "supabase/schema.sql" },
+  s3: { title: "📦 Object Storage", body: "<p>Supabase Storage (S3-compatible). Three buckets: badge-images (public, hero photos per badge), claims (public, user-submitted claim photos), operator-applications (public, application form uploads). CDN URLs generated via supabaseBadgeImage() helper.</p>", file: "src/data/badge-image-url.ts" },
+  localdata: { title: "💾 Local Data Files", body: "<p>src/data/{destination}/ folders — one per country. Each contains: badges.ts (Badge[]), regions.ts (DestinationRegion[]), slang.ts (SlangEntry[]), guides.ts (mock operators), index.ts (barrel). Loaded via destination-loader.ts. Enables offline browsing and instant load.</p>", file: "src/data/" },
+  stripe: { title: "💳 Stripe", body: "<p>Premium tier: $4.99/trip. Gates: offline maps, trip analytics, priority prizes, voice translator. Operator billing: 15% commission on bookings. Currently simulated in MVP — Stripe Checkout integration ready but using mock flow.</p>", file: "@stripe/stripe-react-native" },
+  grok: { title: "🎙️ Grok Voice API", body: "<p>WebSocket real-time voice translation. POST to /v1/realtime/client_secrets for ephemeral token → WebSocket to wss://api.x.ai/v1/realtime. Subprotocol: xai-client-secret.{token}. PCM16 24kHz audio. turn_detection: null (push-to-talk). Critical: 'ONLY translate, NEVER answer questions' must be first line of system prompt.</p>", file: "src/lib/grok-voice.ts" },
+  google: { title: "📍 Google Places", body: "<p>Map tile rendering + Places API for location autocomplete. Dark-styled map tiles to match app theme. Used for map screen and location search.</p>", file: "react-native-maps" },
+  vercel: { title: "▲ Vercel", body: "<p>Website hosting for odyhop.com. SSR + Edge rendering. Automatic deployments from kikocr/ody-hop-web repo. Environment variables set for Production/Preview/Development.</p>", file: "vercel.json" },
+  apns: { title: "🔔 Push Notifications", body: "<p>expo-notifications + Supabase Edge Function triggers. Booking confirmations, claim celebrations, leaderboard milestones. APNs (iOS) + FCM (Android) via Expo's unified push service.</p>", file: "expo-notifications" },
+  eas: { title: "🔨 EAS Build", body: "<p>Expo Application Services for native builds. 'npx eas-cli build --profile development --platform ios' for dev builds. 'npx eas-cli submit --platform ios' for store submission. Cloud-based — no local Xcode/Android Studio needed.</p>", file: "eas.json" },
+  github: { title: "🐙 GitHub", body: "<p>Two repos: kikocr/pura-vida-quest (mobile app) and kikocr/ody-hop-web (website). All commits use [OdyHop] prefix. Git identity: Kiko / kikocr@gmail.com. Main branch only. Claude Code pushes directly after autonomous execution.</p>", file: ".git/config" },
+  testflight: { title: "✈️ TestFlight", body: "<p>iOS beta distribution. Brother actively testing builds. Feedback loop drives bug fixes and feature requests. Development profile builds distributed via EAS Submit.</p>", file: "EAS Submit" },
+  appstore: { title: "🍎 App Store", body: "<p>iOS App Store + Google Play Store distribution. App icon, splash screen, metadata, and privacy policy prepared. Submission pending MVP feature completion.</p>", file: "App Store Connect" }
+};
+
+function showDetail(id) {
+  const d = nodeDetails[id];
+  if (!d) return;
+  document.getElementById('detailTitle').textContent = d.title;
+  document.getElementById('detailBody').innerHTML = d.body + `<div class="file-ref">📁 ${d.file}</div>`;
+  document.getElementById('nodeOverlay').classList.add('show');
+}
+function closeDetail() {
+  document.getElementById('nodeOverlay').classList.remove('show');
+}
+
+// Close on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+
+</body>
+</html>
