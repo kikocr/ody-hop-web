@@ -1071,7 +1071,7 @@ function SectionTeam() {
             <FounderCard
               initials="F1"
               name="Founder One"
-              role="Co-founder & CEO · Product, Technology, AI"
+              role="Co-Founder · Product, Technology, AI"
               bio="Leads product, engineering, and AI integration. Built the Ody Hop mobile app, operator dashboard, and AI translator stack end to end. Two decades shipping software products."
             />
           </li>
@@ -1079,7 +1079,7 @@ function SectionTeam() {
             <FounderCard
               initials="F2"
               name="Founder Two"
-              role="Co-founder & Operations · Costa Rica, Operator Network"
+              role="Co-Founder · Costa Rica, Operator Network"
               bio="Based in Costa Rica. Owns the on-the-ground operator pipeline — 20+ guides already verified for launch. Decade of running tour operations across Latin America."
             />
           </li>
