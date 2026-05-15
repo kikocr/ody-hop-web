@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pura Vida Quest — Revenue Forecaster</title>
+<style>
+  :root {
+    --sunset: #E8794A;
+    --sunset-dark: #C45F32;
+    --gold: #F5B82E;
+    --ocean: #1B5E63;
+    --ocean-dark: #0F4348;
+    --jungle: #2F7D56;
+    --cream: #FDF6EC;
+    --ink: #1F2937;
+    --ink-soft: #374151;
+    --mute: #6B7280;
+    --line: #E5E7EB;
+    --line-soft: #F3F4F6;
+    --bg: #F8F5F0;
+    --danger: #DC2626;
+    --success: #059669;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(27,94,99,0.05);
+    --shadow: 0 2px 4px rgba(0,0,0,0.03), 0 8px 20px rgba(27,94,99,0.08);
+    --shadow-lg: 0 12px 32px rgba(27,94,99,0.15);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 14px; line-height: 1.5; }
+
+  .app { max-width: 1360px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  .topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-logo {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: linear-gradient(135deg, var(--sunset) 0%, var(--gold) 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 17px; letter-spacing: -0.5px; box-shadow: var(--shadow);
+  }
+  .brand-text h1 { margin: 0; font-size: 17px; font-weight: 700; color: var(--ocean-dark); letter-spacing: -0.2px; }
+  .brand-text p { margin: 2px 0 0; font-size: 11px; color: var(--mute); letter-spacing: 0.4px; text-transform: uppercase; font-weight: 500; }
+
+  .controls-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  .segmented { display: inline-flex; background: white; border: 1px solid var(--line); border-radius: 999px; padding: 3px; box-shadow: var(--shadow-sm); }
+  .segmented button { background: transparent; border: none; padding: 7px 14px; font-size: 13px; font-weight: 600; color: var(--mute); cursor: pointer; border-radius: 999px; transition: all 0.15s; font-family: inherit; }
+  .segmented button:hover { color: var(--ink); }
+  .segmented button.active { background: var(--ocean); color: white; box-shadow: 0 2px 4px rgba(27,94,99,0.25); }
+
+  .switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; background: white; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; color: var(--ink-soft); font-weight: 500; box-shadow: var(--shadow-sm); }
+  .switch input { display: none; }
+  .switch-track { width: 32px; height: 18px; background: #D1D5DB; border-radius: 999px; position: relative; transition: background 0.2s; }
+  .switch-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .switch input:checked + .switch-track { background: var(--sunset); }
+  .switch input:checked + .switch-track::after { transform: translateX(14px); }
+
+  button.btn { background: white; border: 1px solid var(--line); color: var(--ink-soft); padding: 7px 13px; font-size: 12px; font-weight: 600; border-radius: 8px; cursor: pointer; font-family: inherit; box-shadow: var(--shadow-sm); transition: all 0.15s; }
+  button.btn:hover { border-color: var(--ocean); color: var(--ocean); }
+  button.btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+  .presets { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; font-size: 12px; color: var(--mute); }
+  .presets strong { color: var(--ink-soft); margin-right: 4px; }
+  .chip { display: inline-block; padding: 5px 11px; font-size: 12px; font-weight: 600; color: var(--ocean); background: var(--cream); border-radius: 999px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+  .chip:hover { border-color: var(--sunset); background: white; color: var(--sunset-dark); }
+
+  .country-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; padding: 12px 14px; background: white; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+  .country-bar-label { font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; margin-right: 6px; }
+  .country-tab { display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; color: var(--ink-soft); cursor: pointer; transition: all 0.15s; }
+  .country-tab:hover:not(.active) { border-color: var(--ocean); color: var(--ocean); background: white; }
+  .country-tab.active { background: var(--ocean); color: white; border-color: var(--ocean); box-shadow: 0 2px 6px rgba(27,94,99,0.25); }
+  .remove-btn { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.25); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .country-tab:not(.active) .remove-btn { background: var(--line); }
+  .remove-btn:hover { background: var(--danger) !important; color: white; }
+  .add-country-btn { background: var(--cream); border: 1px dashed var(--sunset); color: var(--sunset); padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .add-country-btn:hover { background: var(--sunset); color: white; border-style: solid; }
+
+  .hero { background: linear-gradient(135deg, var(--ocean-dark) 0%, var(--ocean) 60%, var(--jungle) 100%); color: white; border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; top: -40%; right: -10%; width: 380px; height: 380px; background: radial-gradient(circle, rgba(245,184,46,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero-head { font-size: 11px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 6px; }
+  .hero-title { font-size: 22px; font-weight: 700; margin: 0 0 18px; letter-spacing: -0.3px; }
+  .hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; z-index: 1; }
+  @media (max-width: 720px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } }
+  .hero-metric .label { font-size: 11px; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 600; }
+  .hero-metric .value { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin-top: 4px; line-height: 1.05; }
+  .hero-metric .sub { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+
+  .main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
+
+  .panel { background: white; border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); padding: 20px 22px; margin-bottom: 16px; }
+  .panel h2 { font-size: 12px; font-weight: 700; color: var(--ocean-dark); text-transform: uppercase; letter-spacing: 0.9px; margin: 0 0 16px; display: flex; align-items: center; justify-content: space-between; }
+  .panel h2 .badge { background: var(--cream); color: var(--sunset-dark); font-size: 10px; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.3px; font-weight: 700; text-transform: none; }
+  .panel h3 { font-size: 11px; font-weight: 700; color: var(--ink); margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .panel h3:first-of-type { margin-top: 0; }
+  .panel h3 .sub { font-weight: 500; color: var(--mute); text-transform: none; letter-spacing: 0; margin-left: 4px; font-size: 11px; }
+
+  .range-row { padding: 10px 0; border-bottom: 1px dashed var(--line-soft); }
+  .range-row:last-child { border-bottom: none; }
+  .range-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 8px; }
+  .range-head label { font-size: 13px; color: var(--ink-soft); font-weight: 500; line-height: 1.3; }
+  .range-head small { font-size: 11px; color: var(--mute); font-weight: 400; display: block; margin-top: 1px; }
+  .range-head .value { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--ocean); background: var(--cream); padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+  input[type="range"] { width: 100%; -webkit-appearance: none; appearance: none; background: transparent; margin: 2px 0; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; background: linear-gradient(to right, var(--sunset), var(--gold)); border-radius: 999px; }
+  input[type="range"]::-moz-range-track { height: 6px; background: linear-gradient(to right, var(--sunset), var(--gold)); border-radius: 999px; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: white; border: 2px solid var(--ocean); border-radius: 50%; cursor: pointer; margin-top: -6px; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+  input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; background: white; border: 2px solid var(--ocean); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
+  .num-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--line-soft); }
+  .num-row:last-child { border-bottom: none; }
+  .num-row label { font-size: 13px; color: var(--ink-soft); font-weight: 500; display: flex; flex-direction: column; gap: 2px; }
+  .num-row label small { color: var(--mute); font-size: 11px; font-weight: 400; }
+  .num-row .wrap { display: flex; align-items: center; gap: 4px; }
+  .num-row input[type="number"] { width: 95px; padding: 6px 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--line); border-radius: 6px; text-align: right; font-family: var(--mono); color: var(--ocean-dark); background: var(--cream); }
+  .num-row input[type="text"] { width: 180px; padding: 7px 10px; font-size: 13px; font-weight: 600; border: 1px solid var(--line); border-radius: 6px; font-family: inherit; color: var(--ink); background: var(--cream); }
+  .num-row input:focus { outline: 2px solid var(--sunset); outline-offset: 1px; border-color: var(--sunset); }
+  .num-row .unit { font-size: 11px; color: var(--mute); }
+
+  .adv-only { display: none; }
+  body.advanced .adv-only { display: block; }
+
+  .out-panel { background: white; border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); padding: 20px 22px; margin-bottom: 16px; }
+  .out-panel h3 { font-size: 12px; font-weight: 700; color: var(--ocean-dark); text-transform: uppercase; letter-spacing: 0.9px; margin: 0 0 16px; display: flex; align-items: center; justify-content: space-between; }
+  .out-panel h3 .hint { color: var(--mute); font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+  svg { display: block; width: 100%; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line-soft); }
+  .legend .leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-soft); }
+  .legend .leg .sw { width: 10px; height: 10px; border-radius: 3px; }
+  .tiny-help { font-size: 11px; color: var(--mute); margin-top: 10px; line-height: 1.45; font-style: italic; }
+
+  .stream-row { display: grid; grid-template-columns: 1fr 100px 50px; gap: 8px; align-items: center; padding: 7px 0; font-size: 13px; border-bottom: 1px dashed var(--line-soft); }
+  .stream-row:last-child { border-bottom: none; }
+  .stream-row .name { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
+  .stream-row .name .sw { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .stream-row .val { text-align: right; font-family: var(--mono); font-weight: 700; color: var(--ocean-dark); }
+  .stream-row .pct { text-align: right; font-family: var(--mono); color: var(--mute); font-size: 11px; }
+
+  .tornado-row { display: grid; grid-template-columns: 150px 1fr 80px; gap: 10px; align-items: center; padding: 5px 0; font-size: 12px; }
+  .tornado-label { color: var(--ink-soft); text-align: right; font-weight: 500; }
+  .tornado-bars { position: relative; height: 18px; }
+  .tornado-bar { position: absolute; top: 2px; height: 14px; border-radius: 3px; }
+  .tornado-bar.down { background: var(--danger); right: 50%; opacity: 0.72; }
+  .tornado-bar.up { background: var(--success); left: 50%; opacity: 0.82; }
+  .tornado-axis { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--ink); opacity: 0.25; }
+  .tornado-delta { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--ocean); text-align: right; }
+
+  .multi-row { display: grid; grid-template-columns: 150px 1fr 120px 110px; gap: 12px; align-items: center; padding: 8px 0; font-size: 13px; border-bottom: 1px dashed var(--line-soft); }
+  .multi-row:last-child { border-bottom: none; }
+  .multi-row .mr-name { font-weight: 600; color: var(--ink); }
+  .multi-row .mr-bar-wrap { height: 18px; background: var(--line-soft); border-radius: 4px; overflow: hidden; }
+  .multi-row .mr-bar { height: 100%; background: linear-gradient(90deg, var(--sunset), var(--gold)); transition: width 0.3s; }
+  .multi-row .mr-rev { text-align: right; font-family: var(--mono); font-weight: 700; color: var(--ocean-dark); }
+  .multi-row .mr-profit { text-align: right; font-family: var(--mono); font-size: 11px; font-weight: 600; }
+
+  details { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; background: var(--cream); }
+  details summary { cursor: pointer; font-weight: 600; color: var(--ocean-dark); font-size: 13px; user-select: none; outline: none; }
+  details[open] summary { margin-bottom: 10px; }
+  details .cost-note { font-size: 12px; color: var(--ink-soft); line-height: 1.6; margin: 8px 0; }
+  details .cost-note strong { color: var(--ocean-dark); }
+
+  .foot { text-align: center; color: var(--mute); font-size: 11px; margin-top: 40px; padding-top: 20px; border-top: 1px dashed var(--line); }
+
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--ocean-dark); color: white; padding: 11px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; z-index: 1000; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">PV</div>
+      <div class="brand-text">
+        <h1>Pura Vida Quest — Revenue Forecaster</h1>
+        <p>Investor-ready projection model</p>
+      </div>
+    </div>
+    <div class="controls-bar">
+      <div class="segmented">
+        <button data-action="set-mode" data-value="single">Single Country</button>
+        <button data-action="set-mode" data-value="multi">Multi-Country</button>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="advancedToggle">
+        <span class="switch-track"></span>
+        Advanced
+      </label>
+      <button class="btn" data-action="save">💾 Save</button>
+      <button class="btn" data-action="load">📂 Load</button>
+      <button class="btn danger" data-action="reset">↺ Reset</button>
+      <input type="file" id="fileInput" accept=".json" style="display:none">
+    </div>
+  </div>
+
+  <div class="presets">
+    <strong>Quick scenarios:</strong>
+    <span class="chip" data-action="load-preset" data-value="pilot">Pilot · 1K MAU</span>
+    <span class="chip" data-action="load-preset" data-value="growth">Growth · 5K MAU</span>
+    <span class="chip" data-action="load-preset" data-value="scale">Scale · 25K MAU</span>
+    <span class="chip" data-action="load-preset" data-value="multi">Multi-Country · 100K MAU</span>
+  </div>
+
+  <div id="countryBar"></div>
+  <div class="hero" id="hero"></div>
+
+  <div class="main-grid">
+    <div>
+      <div class="panel" id="inputPanel"></div>
+      <details class="adv-only">
+        <summary>📖 How cost estimates are derived</summary>
+        <div class="cost-note"><strong>Team:</strong> $0 default assumes bootstrap (no founder salary). Typical: $3–5K/mo/founder pre-seed; $7–10K/mo post-funding. CR devs ~$3K/mo, US-equivalent $5–8K/mo.</div>
+        <div class="cost-note"><strong>Infrastructure:</strong> Supabase free → $25/mo Pro (~1K MAU) → $599/mo Team (&gt;25K MAU). Expo/EAS $29/mo prod builds. Claude Vision ~$0.01/image for v2 claim verification. Maps API free under 28K loads/mo.</div>
+        <div class="cost-note"><strong>Stripe fees:</strong> 2.9% + $0.30/transaction, auto-calculated from your booking volume.</div>
+        <div class="cost-note"><strong>Marketing:</strong> Lean marketplace typical: $500/mo early → $2K/mo growth → $5–10K/mo scale. Operator-network advantage lets you underspend on paid acquisition vs competitors.</div>
+        <div class="cost-note"><strong>Other:</strong> Apple Dev $99/yr, Google Play $25 one-time, legal, accounting, insurance, ops travel. Rounds to $200–500/mo for 2-person, more at scale.</div>
+      </details>
+    </div>
+
+    <div>
+      <div class="out-panel">
+        <h3>Revenue breakdown by stream <span class="hint">current assumptions</span></h3>
+        <div id="streamChart"></div>
+      </div>
+      <div class="out-panel">
+        <h3>Revenue at different scale levels <span class="hint">unit economics across 4 MAU tiers</span></h3>
+        <div id="scaleChart"></div>
+      </div>
+      <div class="out-panel">
+        <h3>24-month growth projection <span class="hint">starting MAU · monthly compounded growth</span></h3>
+        <div id="growthChart"></div>
+      </div>
+      <div class="out-panel adv-only">
+        <h3>Sensitivity analysis <span class="hint">impact of ±20% per lever on monthly revenue</span></h3>
+        <div id="sensitivityChart"></div>
+      </div>
+      <div class="out-panel adv-only">
+        <h3>Profit &amp; break-even <span class="hint">24-month monthly profit/loss</span></h3>
+        <div id="profitChart"></div>
+      </div>
+      <div class="out-panel" id="multiCompare" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="foot">Pura Vida Quest · Lokalat · All figures USD · Projections are models, not commitments · Unit economics from Costa Rica tourism benchmarks</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Pura Vida Quest — Revenue Forecaster v2
+   Uses event delegation for robust click handling after re-renders.
+   ============================================================ */
+
+const DEFAULT_COUNTRY = () => ({
+  id: 'c_' + Math.random().toString(36).slice(2, 8),
+  name: 'Costa Rica',
+  scaleMode: 'mau',
+  mau: 5000,
+  annualTourists: 3000000,
+  seasonalityFactor: 0.10,
+  bookingConversion: 0.225,
+  bookingsPerBooker: 1.3,
+  avgBookingValue: 90,
+  commissionRate: 0.175,
+  premiumConversion: 0.06,
+  premiumArpu: 7,
+  affiliatePerTourist: 3.25,
+  operatorDensity: 70,
+  premiumOpConversion: 0.25,
+  avgPremiumOpSpend: 150,
+  totalBadges: 85,
+  sponsoredBadgeAdoption: 0.20,
+  avgSponsoredPrice: 185,
+  promotedConversion: 0.15,
+  avgPromotedPrice: 75,
+  tourismBoardPartnerships: 0,
+  avgPartnershipValue: 15000,
+  franchiseMonthlyContribution: 0,
+  teamSalaries: 0,
+  hosting: 100,
+  marketing: 500,
+  otherCosts: 300,
+  startingMau: 500,
+  monthlyGrowthRate: 0.15,
+});
+
+const PRESETS = {
+  pilot: [{ ...DEFAULT_COUNTRY(), name: 'Costa Rica', mau: 1000, startingMau: 100, monthlyGrowthRate: 0.20, sponsoredBadgeAdoption: 0.10, hosting: 50, marketing: 300 }],
+  growth: [{ ...DEFAULT_COUNTRY(), name: 'Costa Rica', mau: 5000, startingMau: 1000, monthlyGrowthRate: 0.14, sponsoredBadgeAdoption: 0.20, tourismBoardPartnerships: 1, teamSalaries: 3000, hosting: 150, marketing: 1500 }],
+  scale: [{ ...DEFAULT_COUNTRY(), name: 'Costa Rica', mau: 25000, startingMau: 5000, monthlyGrowthRate: 0.08, sponsoredBadgeAdoption: 0.35, tourismBoardPartnerships: 3, teamSalaries: 15000, hosting: 600, marketing: 5000 }],
+  multi: [
+    { ...DEFAULT_COUNTRY(), name: 'Costa Rica', mau: 40000, startingMau: 25000, monthlyGrowthRate: 0.05, sponsoredBadgeAdoption: 0.45, tourismBoardPartnerships: 3, teamSalaries: 18000, hosting: 900, marketing: 6000 },
+    { ...DEFAULT_COUNTRY(), name: 'Guatemala', mau: 35000, startingMau: 5000, monthlyGrowthRate: 0.12, sponsoredBadgeAdoption: 0.30, tourismBoardPartnerships: 2, teamSalaries: 6000, hosting: 500, marketing: 3000, franchiseMonthlyContribution: 8000 },
+    { ...DEFAULT_COUNTRY(), name: 'Peru', mau: 25000, startingMau: 3000, monthlyGrowthRate: 0.14, sponsoredBadgeAdoption: 0.25, tourismBoardPartnerships: 2, teamSalaries: 5000, hosting: 400, marketing: 2500, franchiseMonthlyContribution: 6000 },
+  ],
+};
+
+let state = { mode: 'single', advanced: false, activeCountry: 0, countries: [DEFAULT_COUNTRY()] };
+const LS_KEY = 'pvq_forecaster_v2';
+
+function saveState() { try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {} }
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const p = JSON.parse(raw);
+    if (p && Array.isArray(p.countries) && p.countries.length > 0) {
+      state = p;
+      state.countries = state.countries.map(c => ({ ...DEFAULT_COUNTRY(), ...c }));
+    }
+  } catch (e) {}
+}
+
+// ---------- Calculations ----------
+function effectiveMau(c) { return c.scaleMode === 'annual' ? Math.round(c.annualTourists * c.seasonalityFactor) : c.mau; }
+
+function calcRevenue(c, mauOverride) {
+  const mau = mauOverride !== undefined ? mauOverride : effectiveMau(c);
+  const bookings = mau * c.bookingConversion * c.bookingsPerBooker;
+  const gmv = bookings * c.avgBookingValue;
+  const bookingCommission = gmv * c.commissionRate;
+  const premium = mau * c.premiumConversion * c.premiumArpu;
+  const affiliate = mau * c.affiliatePerTourist;
+  const operators = mau / c.operatorDensity;
+  const premiumOps = operators * c.premiumOpConversion * c.avgPremiumOpSpend;
+  const sponsoredBadges = c.totalBadges * c.sponsoredBadgeAdoption * c.avgSponsoredPrice;
+  const promoted = operators * c.promotedConversion * c.avgPromotedPrice;
+  const tourismBoards = (c.tourismBoardPartnerships * c.avgPartnershipValue) / 12;
+  const franchise = c.franchiseMonthlyContribution || 0;
+  return {
+    bookingCommission, premium, affiliate, premiumOps, sponsoredBadges, promoted, tourismBoards, franchise,
+    total: bookingCommission + premium + affiliate + premiumOps + sponsoredBadges + promoted + tourismBoards + franchise,
+    gmv, bookings, operators,
+  };
+}
+
+function calcCosts(c, rev) {
+  const stripeFees = (rev.gmv || 0) * 0.029 + (rev.bookings || 0) * 0.30;
+  return { teamSalaries: c.teamSalaries, hosting: c.hosting, marketing: c.marketing, otherCosts: c.otherCosts, stripeFees, total: c.teamSalaries + c.hosting + c.marketing + c.otherCosts + stripeFees };
+}
+
+function calcTimeSeries(c, months = 24) {
+  const s = [];
+  let mau = c.startingMau;
+  for (let m = 1; m <= months; m++) {
+    const rev = calcRevenue(c, mau);
+    const cost = calcCosts(c, rev);
+    s.push({ month: m, mau: Math.round(mau), revenue: rev.total, costs: cost.total, profit: rev.total - cost.total, gmv: rev.gmv });
+    mau *= (1 + c.monthlyGrowthRate);
+  }
+  return s;
+}
+
+function calcSensitivity(c) {
+  const base = calcRevenue(c).total;
+  const levers = [
+    { key: 'mau', label: 'MAU scale' },
+    { key: 'bookingConversion', label: 'Booking conversion' },
+    { key: 'avgBookingValue', label: 'Avg booking value' },
+    { key: 'commissionRate', label: 'Commission rate' },
+    { key: 'bookingsPerBooker', label: 'Bookings per booker' },
+    { key: 'premiumConversion', label: 'Premium conversion' },
+    { key: 'premiumArpu', label: 'Premium ARPU' },
+    { key: 'affiliatePerTourist', label: 'Affiliate per tourist' },
+    { key: 'premiumOpConversion', label: 'Premium op conversion' },
+    { key: 'avgPremiumOpSpend', label: 'Premium op spend' },
+    { key: 'sponsoredBadgeAdoption', label: 'Sponsored adoption' },
+    { key: 'avgSponsoredPrice', label: 'Sponsored price' },
+  ];
+  return levers.map(l => {
+    const up = calcRevenue({ ...c, [l.key]: c[l.key] * 1.2 }).total;
+    const dn = calcRevenue({ ...c, [l.key]: c[l.key] * 0.8 }).total;
+    return { label: l.label, base, up, down: dn, delta: Math.max(Math.abs(up - base), Math.abs(base - dn)) };
+  }).sort((a, b) => b.delta - a.delta);
+}
+
+// ---------- Format ----------
+function fmtMoney(n) {
+  if (!isFinite(n)) return '—';
+  const a = Math.abs(n);
+  if (a >= 1e6) return '$' + (n / 1e6).toFixed(a < 10e6 ? 2 : 1) + 'M';
+  if (a >= 1e3) return '$' + (n / 1e3).toFixed(a < 10e3 ? 1 : 0) + 'K';
+  return '$' + Math.round(n).toLocaleString();
+}
+function fmtMoneyFull(n) { return '$' + Math.round(n).toLocaleString(); }
+function fmtNum(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return Math.round(n).toLocaleString();
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+const STREAMS = [
+  { key: 'bookingCommission', label: 'Booking commission', color: '#E8794A' },
+  { key: 'affiliate',        label: 'Affiliate travel',    color: '#F5B82E' },
+  { key: 'premiumOps',       label: 'Premium op subs',     color: '#1B5E63' },
+  { key: 'sponsoredBadges',  label: 'Sponsored badges',    color: '#2F7D56' },
+  { key: 'premium',          label: 'Tourist premium',     color: '#7C3AED' },
+  { key: 'promoted',         label: 'Promoted listings',   color: '#DB2777' },
+  { key: 'tourismBoards',    label: 'Tourism board',       color: '#0891B2' },
+  { key: 'franchise',        label: 'Franchise',           color: '#B45309' },
+];
+
+// ---------- Hero ----------
+function renderHero() {
+  if (state.mode === 'multi') {
+    const all = state.countries.map(c => ({ name: c.name, mau: effectiveMau(c), rev: calcRevenue(c).total, cost: calcCosts(c, calcRevenue(c)).total }));
+    const totalRev = all.reduce((s, a) => s + a.rev, 0);
+    const totalMau = all.reduce((s, a) => s + a.mau, 0);
+    const totalProfit = totalRev - all.reduce((s, a) => s + a.cost, 0);
+    return `
+      <div class="hero-head">Combined across ${state.countries.length} countries</div>
+      <div class="hero-title">Monthly Revenue · ${fmtMoneyFull(totalRev)}</div>
+      <div class="hero-grid">
+        <div class="hero-metric"><div class="label">Annualized ARR</div><div class="value">${fmtMoney(totalRev * 12)}</div><div class="sub">combined portfolio</div></div>
+        <div class="hero-metric"><div class="label">Active Tourists</div><div class="value">${fmtNum(totalMau)}</div><div class="sub">across ${state.countries.length} markets</div></div>
+        <div class="hero-metric"><div class="label">Avg per Country</div><div class="value">${fmtMoney(totalRev / state.countries.length)}</div><div class="sub">monthly</div></div>
+        <div class="hero-metric"><div class="label">${state.advanced ? 'Monthly Profit' : 'Active Markets'}</div><div class="value">${state.advanced ? (totalProfit >= 0 ? '' : '−') + fmtMoney(Math.abs(totalProfit)) : state.countries.length}</div><div class="sub">${state.advanced ? 'after all costs' : 'in portfolio'}</div></div>
+      </div>
+    `;
+  }
+  const c = state.countries[state.activeCountry];
+  const rev = calcRevenue(c);
+  const cost = calcCosts(c, rev);
+  const mau = effectiveMau(c);
+  const arpu = mau > 0 ? rev.total / mau : 0;
+  const profit = rev.total - cost.total;
+  return `
+    <div class="hero-head">${escapeHtml(c.name)} · ${state.advanced ? 'Advanced mode' : 'Investor view'}</div>
+    <div class="hero-title">Monthly Revenue · ${fmtMoneyFull(rev.total)}</div>
+    <div class="hero-grid">
+      <div class="hero-metric"><div class="label">Annualized ARR</div><div class="value">${fmtMoney(rev.total * 12)}</div><div class="sub">at current assumptions</div></div>
+      <div class="hero-metric"><div class="label">Active Tourists</div><div class="value">${fmtNum(mau)}</div><div class="sub">${(mau / c.operatorDensity).toFixed(0)} operators supported</div></div>
+      <div class="hero-metric"><div class="label">Blended ARPU</div><div class="value">$${arpu.toFixed(2)}</div><div class="sub">revenue per tourist/mo</div></div>
+      <div class="hero-metric"><div class="label">${state.advanced ? 'Monthly Profit' : 'Booking GMV'}</div><div class="value">${state.advanced ? (profit >= 0 ? '' : '−') + fmtMoney(Math.abs(profit)) : fmtMoney(rev.gmv)}</div><div class="sub">${state.advanced ? fmtMoneyFull(cost.total) + ' total costs' : 'gross booking volume'}</div></div>
+    </div>
+  `;
+}
+
+// ---------- Country bar ----------
+function renderCountryBar() {
+  if (state.mode !== 'multi') return '';
+  const tabs = state.countries.map((c, i) => `
+    <div class="country-tab ${i === state.activeCountry ? 'active' : ''}" data-action="select-country" data-value="${i}">
+      <span>${escapeHtml(c.name)}</span>
+      ${state.countries.length > 1 ? `<span class="remove-btn" data-action="remove-country" data-value="${i}" title="Remove">×</span>` : ''}
+    </div>
+  `).join('');
+  return `
+    <div class="country-bar">
+      <span class="country-bar-label">Countries</span>
+      ${tabs}
+      <button class="add-country-btn" data-action="add-country">+ Add country</button>
+    </div>
+  `;
+}
+
+// ---------- Stream chart ----------
+function renderStreamChart(c) {
+  const rev = calcRevenue(c);
+  if (rev.total <= 0) return '<div style="color:var(--mute);font-size:12px;">No revenue yet — adjust assumptions.</div>';
+  const streams = STREAMS.map(s => ({ ...s, value: rev[s.key] })).filter(s => s.value > 0).sort((a, b) => b.value - a.value);
+  const W = 600, H = 36;
+  let x = 0;
+  const segs = streams.map(s => { const w = (s.value / rev.total) * W; const r = `<rect x="${x}" y="0" width="${w}" height="${H}" fill="${s.color}" />`; x += w; return r; }).join('');
+  const rows = streams.map(s => `
+    <div class="stream-row">
+      <div class="name"><span class="sw" style="background:${s.color}"></span>${s.label}</div>
+      <div class="val">${fmtMoneyFull(s.value)}</div>
+      <div class="pct">${((s.value / rev.total) * 100).toFixed(1)}%</div>
+    </div>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="height:36px;border-radius:8px;overflow:hidden;">${segs}</svg><div style="margin-top:14px">${rows}</div>`;
+}
+
+// ---------- Scale chart ----------
+function renderScaleChart(c) {
+  const levels = [1000, 5000, 25000, 100000];
+  const labels = ['Pilot\n1K MAU', 'Growth\n5K MAU', 'Scale\n25K MAU', 'Multi-Country\n100K MAU'];
+  const results = levels.map(mau => { const t = { ...c, scaleMode: 'mau', mau }; return { mau, total: calcRevenue(t).total, br: calcRevenue(t) }; });
+  const maxT = Math.max(...results.map(r => r.total));
+  const W = 700, H = 300, pL = 70, pR = 20, pT = 30, pB = 50;
+  const cW = W - pL - pR, cH = H - pT - pB, gap = cW / levels.length, barW = gap * 0.6;
+
+  let ticks = '';
+  for (let i = 0; i <= 4; i++) {
+    const v = (maxT * i) / 4, y = pT + cH - (cH * i / 4);
+    ticks += `<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="#E5E7EB" stroke-dasharray="2,3" />`;
+    ticks += `<text x="${pL - 8}" y="${y+4}" text-anchor="end" font-size="10" fill="#6B7280" font-family="monospace">${fmtMoney(v)}</text>`;
+  }
+  let bars = '', lbls = '';
+  results.forEach((r, i) => {
+    const cx = pL + gap * i + gap / 2;
+    let yTop = pT + cH;
+    STREAMS.forEach(s => {
+      const v = r.br[s.key];
+      if (v <= 0) return;
+      const h = (v / maxT) * cH;
+      bars += `<rect x="${cx - barW/2}" y="${yTop - h}" width="${barW}" height="${h}" fill="${s.color}" />`;
+      yTop -= h;
+    });
+    const parts = labels[i].split('\n');
+    lbls += `<text x="${cx}" y="${pT + cH + 18}" text-anchor="middle" font-size="11" fill="#374151" font-weight="700">${parts[0]}</text>`;
+    lbls += `<text x="${cx}" y="${pT + cH + 34}" text-anchor="middle" font-size="10" fill="#6B7280" font-family="monospace">${parts[1]}</text>`;
+    const bt = pT + cH - (r.total / maxT) * cH;
+    lbls += `<text x="${cx}" y="${bt - 8}" text-anchor="middle" font-size="12" fill="#1B5E63" font-weight="800">${fmtMoney(r.total)}</text>`;
+  });
+  const leg = STREAMS.map(s => `<span class="leg"><span class="sw" style="background:${s.color}"></span>${s.label}</span>`).join('');
+  return `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${ticks}${bars}${lbls}<line x1="${pL}" y1="${pT + cH}" x2="${W - pR}" y2="${pT + cH}" stroke="#D1D5DB" /></svg>
+    <div class="legend">${leg}</div>
+    <div class="tiny-help">Current country's unit economics applied across 4 MAU tiers. Shows how recurring streams scale differently than transactional.</div>
+  `;
+}
+
+// ---------- Growth chart ----------
+function renderGrowthChart(c) {
+  const ts = calcTimeSeries(c, 24);
+  const W = 700, H = 280, pL = 70, pR = 30, pT = 30, pB = 40;
+  const cW = W - pL - pR, cH = H - pT - pB;
+  const maxR = Math.max(...ts.map(t => t.revenue), 100);
+  const pts = ts.map((t, i) => ({ x: pL + (cW * i) / (ts.length - 1), y: pT + cH - (t.revenue / maxR) * cH }));
+  const path = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const area = `M${pts[0].x.toFixed(1)},${pT + cH} ${pts.map(p => `L${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} L${pts[pts.length-1].x.toFixed(1)},${pT + cH} Z`;
+  const costPts = ts.map((t, i) => ({ x: pL + (cW * i) / (ts.length - 1), y: pT + cH - (t.costs / maxR) * cH }));
+  const costPath = costPts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+
+  let ticks = '';
+  for (let i = 0; i <= 4; i++) {
+    const v = (maxR * i) / 4, y = pT + cH - (cH * i / 4);
+    ticks += `<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="#E5E7EB" stroke-dasharray="2,3" />`;
+    ticks += `<text x="${pL - 8}" y="${y+4}" text-anchor="end" font-size="10" fill="#6B7280" font-family="monospace">${fmtMoney(v)}</text>`;
+  }
+  let xLbls = '';
+  [0, 5, 11, 17, 23].forEach(i => {
+    const x = pL + (cW * i) / (ts.length - 1);
+    xLbls += `<text x="${x}" y="${pT + cH + 18}" text-anchor="middle" font-size="10" fill="#6B7280">M${i+1}</text>`;
+  });
+
+  let be = '';
+  const bem = ts.findIndex(t => t.profit >= 0);
+  if (bem >= 0 && state.advanced) {
+    const x = pL + (cW * bem) / (ts.length - 1);
+    be = `<line x1="${x.toFixed(1)}" y1="${pT}" x2="${x.toFixed(1)}" y2="${pT + cH}" stroke="#059669" stroke-dasharray="4,3" stroke-width="1.5" />
+           <text x="${x.toFixed(1)}" y="${pT - 8}" text-anchor="middle" font-size="10" fill="#059669" font-weight="700">Break-even M${bem + 1}</text>`;
+  }
+
+  const m12 = ts[11], m24 = ts[23];
+  const advLeg = state.advanced ? `<span class="leg"><span class="sw" style="background:#6B7280"></span>Monthly costs</span><span class="leg" style="color:#059669;font-weight:600">⎟ Break-even</span>` : '';
+  return `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+      ${ticks}
+      <path d="${area}" fill="url(#revGrad)" opacity="0.4" />
+      <path d="${path}" fill="none" stroke="#E8794A" stroke-width="2.5" />
+      ${state.advanced ? `<path d="${costPath}" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-dasharray="4,3" />` : ''}
+      ${be}${xLbls}
+      <line x1="${pL}" y1="${pT + cH}" x2="${W - pR}" y2="${pT + cH}" stroke="#D1D5DB" />
+      <defs><linearGradient id="revGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#E8794A" /><stop offset="100%" stop-color="#E8794A" stop-opacity="0" /></linearGradient></defs>
+    </svg>
+    <div class="legend"><span class="leg"><span class="sw" style="background:#E8794A"></span>Monthly revenue</span>${advLeg}</div>
+    <div class="tiny-help"><strong>Month 1:</strong> ${fmtMoneyFull(ts[0].revenue)} / ${fmtNum(ts[0].mau)} MAU &nbsp;·&nbsp; <strong>Month 12:</strong> ${fmtMoneyFull(m12.revenue)} / ${fmtNum(m12.mau)} MAU &nbsp;·&nbsp; <strong>Month 24:</strong> ${fmtMoneyFull(m24.revenue)} / ${fmtNum(m24.mau)} MAU</div>
+  `;
+}
+
+// ---------- Sensitivity ----------
+function renderSensitivity(c) {
+  const data = calcSensitivity(c);
+  if (!data.length || data[0].delta === 0) return '<div style="color:var(--mute);font-size:12px;">Adjust levers to see sensitivity.</div>';
+  const rows = data.map(d => {
+    const upPct = (d.up - d.base) / d.base, dnPct = (d.down - d.base) / d.base;
+    const upW = Math.min(Math.abs(upPct) / 0.25 * 50, 50), dnW = Math.min(Math.abs(dnPct) / 0.25 * 50, 50);
+    return `
+      <div class="tornado-row">
+        <div class="tornado-label">${d.label}</div>
+        <div class="tornado-bars">
+          <div class="tornado-axis"></div>
+          <div class="tornado-bar down" style="width:${dnW}%"></div>
+          <div class="tornado-bar up" style="width:${upW}%"></div>
+        </div>
+        <div class="tornado-delta">±${fmtMoney(d.delta)}</div>
+      </div>`;
+  }).join('');
+  return rows + `<div class="legend"><span class="leg"><span class="sw" style="background:#DC2626;opacity:0.72"></span>−20% lever</span><span class="leg"><span class="sw" style="background:#059669;opacity:0.82"></span>+20% lever</span></div><div class="tiny-help">Ranked by impact on monthly revenue. Top levers are where pricing and product focus pays off most.</div>`;
+}
+
+// ---------- Profit chart ----------
+function renderProfitChart(c) {
+  const ts = calcTimeSeries(c, 24);
+  const W = 700, H = 240, pL = 70, pR = 20, pT = 20, pB = 30;
+  const cW = W - pL - pR, cH = H - pT - pB;
+  const maxA = Math.max(...ts.map(t => Math.abs(t.profit)), 100);
+  const zY = pT + cH / 2, step = cW / ts.length, barW = step * 0.7;
+  let bars = '';
+  ts.forEach((t, i) => {
+    const cx = pL + step * i + step / 2;
+    const h = (Math.abs(t.profit) / maxA) * (cH / 2);
+    const y = t.profit >= 0 ? zY - h : zY;
+    bars += `<rect x="${(cx - barW/2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" fill="${t.profit >= 0 ? '#059669' : '#DC2626'}" opacity="0.85" />`;
+  });
+  let ticks = '';
+  [-1, -0.5, 0, 0.5, 1].forEach(f => {
+    const v = maxA * f, y = zY - (f * cH / 2);
+    ticks += `<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="${f===0?'#9CA3AF':'#E5E7EB'}" ${f!==0?'stroke-dasharray="2,3"':''} />`;
+    ticks += `<text x="${pL - 8}" y="${y+4}" text-anchor="end" font-size="10" fill="#6B7280" font-family="monospace">${f===0?'$0':(f<0?'−':'+')+fmtMoney(Math.abs(v))}</text>`;
+  });
+  let xL = '';
+  [0, 5, 11, 17, 23].forEach(i => {
+    const x = pL + step * i + step / 2;
+    xL += `<text x="${x}" y="${pT + cH + 16}" text-anchor="middle" font-size="10" fill="#6B7280">M${i+1}</text>`;
+  });
+  const totalP = ts.reduce((s, t) => s + t.profit, 0), be = ts.findIndex(t => t.profit >= 0);
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${ticks}${bars}${xL}</svg><div class="tiny-help"><strong>24-month cumulative: ${totalP >= 0 ? '' : '−'}${fmtMoney(Math.abs(totalP))}</strong>${be >= 0 ? ` · Break-even at month ${be + 1}` : ' · Does not break even in 24 months with current assumptions'}</div>`;
+}
+
+// ---------- Multi comparison ----------
+function renderMultiCompare() {
+  const all = state.countries.map(c => { const r = calcRevenue(c); const cost = calcCosts(c, r); return { name: c.name, rev: r.total, profit: r.total - cost.total }; });
+  const maxR = Math.max(...all.map(a => a.rev), 1);
+  const rows = all.map(a => {
+    const pct = (a.rev / maxR) * 100, pc = a.profit >= 0 ? '#059669' : '#DC2626';
+    return `<div class="multi-row"><div class="mr-name">${escapeHtml(a.name)}</div><div class="mr-bar-wrap"><div class="mr-bar" style="width:${pct}%"></div></div><div class="mr-rev">${fmtMoneyFull(a.rev)}</div><div class="mr-profit" style="color:${pc}">${a.profit >= 0 ? '+' : '−'}${fmtMoney(Math.abs(a.profit))}</div></div>`;
+  }).join('');
+  return `<h3>Per-country comparison <span class="hint">monthly revenue &amp; profit</span></h3>${rows}`;
+}
+
+// ---------- Input builders ----------
+function range(id, label, hint, min, max, step, value, fmtFn) {
+  return `<div class="range-row"><div class="range-head"><div><label>${label}</label>${hint ? `<small>${hint}</small>` : ''}</div><div class="value" data-value-for="${id}">${fmtFn(value)}</div></div><input type="range" data-key="${id}" min="${min}" max="${max}" step="${step}" value="${value}"></div>`;
+}
+function num(id, label, hint, value, unit = '', step = 1) {
+  return `<div class="num-row"><label>${label}${hint ? `<small>${hint}</small>` : ''}</label><div class="wrap"><input type="number" data-key="${id}" value="${value}" min="0" step="${step}">${unit ? `<span class="unit">${unit}</span>` : ''}</div></div>`;
+}
+
+function renderInputs(c) {
+  const F = {
+    pct: v => (v * 100).toFixed(1) + '%',
+    pctW: v => (v * 100).toFixed(0) + '%',
+    dol: v => '$' + v,
+    dolD: v => '$' + v.toFixed(2),
+    dolM: v => '$' + v + '/mo',
+    n: v => fmtNum(v),
+    r: v => v.toFixed(2),
+  };
+  let h = `<h2>Configuration <span class="badge">${escapeHtml(c.name)}</span></h2>`;
+
+  h += `<h3>Identity</h3>`;
+  h += `<div class="num-row"><label>Country / region name</label><div class="wrap"><input type="text" data-key="name" value="${escapeHtml(c.name)}"></div></div>`;
+
+  h += `<h3>Scale <span class="sub">tourist base</span></h3>`;
+  if (state.advanced) {
+    h += `<div class="num-row"><label>Scale input mode<small>Direct MAU or annual tourist volume</small></label><div class="segmented" style="padding:2px;"><button data-action="set-scale-mode" data-value="mau" class="${c.scaleMode === 'mau' ? 'active' : ''}" style="font-size:11px;padding:4px 10px;">MAU</button><button data-action="set-scale-mode" data-value="annual" class="${c.scaleMode === 'annual' ? 'active' : ''}" style="font-size:11px;padding:4px 10px;">Annual</button></div></div>`;
+  }
+  if (c.scaleMode === 'mau' || !state.advanced) {
+    h += range('mau', 'Monthly Active Tourists', 'Peak season active users', 100, 150000, 100, c.mau, F.n);
+  } else {
+    h += range('annualTourists', 'Annual tourists', 'Costa Rica ~3M/yr benchmark', 10000, 10000000, 10000, c.annualTourists, F.n);
+    h += range('seasonalityFactor', 'Peak-month factor', 'Fraction active in peak month', 0.03, 0.20, 0.01, c.seasonalityFactor, F.pct);
+    h += `<div class="tiny-help">→ Computed MAU: <strong>${fmtNum(c.annualTourists * c.seasonalityFactor)}</strong></div>`;
+  }
+
+  h += `<h3>Revenue assumptions</h3>`;
+  h += range('bookingConversion', 'Booking conversion', '% of tourists who book', 0.05, 0.40, 0.005, c.bookingConversion, F.pct);
+  h += range('avgBookingValue', 'Avg booking value', '$ per tour/activity', 30, 200, 5, c.avgBookingValue, F.dol);
+  h += range('commissionRate', 'Commission rate', '15–20% is typical', 0.10, 0.25, 0.005, c.commissionRate, F.pct);
+  h += range('premiumConversion', 'Premium conversion', '% of tourists on premium', 0.01, 0.20, 0.005, c.premiumConversion, F.pct);
+  h += range('affiliatePerTourist', 'Affiliate $ per tourist', 'Hotels + insurance + cars', 0, 12, 0.25, c.affiliatePerTourist, F.dolD);
+
+  h += `<div class="adv-only">`;
+  h += `<h3>Revenue assumptions (advanced)</h3>`;
+  h += range('bookingsPerBooker', 'Bookings per booker', 'Per trip average', 1, 3, 0.05, c.bookingsPerBooker, F.r);
+  h += range('premiumArpu', 'Premium monthly ARPU', 'Avg $ per premium user/mo', 2, 15, 0.5, c.premiumArpu, F.dolD);
+
+  h += `<h3>Operator marketplace</h3>`;
+  h += range('operatorDensity', 'Operator density', '1 operator per N tourists', 30, 200, 5, c.operatorDensity, v => '1 per ' + v);
+  h += range('premiumOpConversion', '% operators on paid plan', 'Featured placement subs', 0.05, 0.50, 0.01, c.premiumOpConversion, F.pctW);
+  h += range('avgPremiumOpSpend', 'Avg premium op spend', '$75/$150/$300 blended', 75, 300, 5, c.avgPremiumOpSpend, F.dolM);
+
+  h += `<h3>Sponsored badges</h3>`;
+  h += range('totalBadges', 'Total badges', '85 for Costa Rica', 50, 200, 5, c.totalBadges, v => v + ' badges');
+  h += range('sponsoredBadgeAdoption', 'Sponsored adoption', '% of badges with a sponsor', 0.05, 0.80, 0.01, c.sponsoredBadgeAdoption, F.pctW);
+  h += range('avgSponsoredPrice', 'Avg sponsored price', '$/mo per sponsor', 50, 500, 10, c.avgSponsoredPrice, F.dolM);
+
+  h += `<h3>Promoted listings</h3>`;
+  h += range('promotedConversion', '% of ops advertising', 'Non-badge nearby businesses', 0.05, 0.40, 0.01, c.promotedConversion, F.pctW);
+  h += range('avgPromotedPrice', 'Avg promoted price', '$/mo per advertiser', 25, 200, 5, c.avgPromotedPrice, F.dolM);
+
+  h += `<h3>Partnerships &amp; franchise</h3>`;
+  h += num('tourismBoardPartnerships', 'Tourism board partners', '# of boards signed', c.tourismBoardPartnerships, '', 1);
+  h += num('avgPartnershipValue', 'Avg partnership value', '$ per year per board', c.avgPartnershipValue, '/yr', 1000);
+  h += num('franchiseMonthlyContribution', 'Franchise monthly rev', 'Rev from other countries', c.franchiseMonthlyContribution, '/mo', 500);
+
+  h += `<h3>Monthly costs</h3>`;
+  h += num('teamSalaries', 'Team salaries', 'See cost note below', c.teamSalaries, '/mo', 500);
+  h += num('hosting', 'Infrastructure', 'Supabase + APIs + tools', c.hosting, '/mo', 25);
+  h += num('marketing', 'Marketing', 'Paid acquisition + content', c.marketing, '/mo', 100);
+  h += num('otherCosts', 'Other', 'Legal, accounting, stores', c.otherCosts, '/mo', 50);
+  h += `<div class="tiny-help">Stripe fees (2.9% + $0.30/tx) auto-calculated from booking volume.</div>`;
+
+  h += `<h3>Growth curve <span class="sub">24-month projection</span></h3>`;
+  h += range('startingMau', 'Starting MAU (month 1)', 'Initial tourist base', 50, 50000, 50, c.startingMau, F.n);
+  h += range('monthlyGrowthRate', 'Monthly growth rate', 'Compounded', 0, 0.40, 0.005, c.monthlyGrowthRate, F.pct);
+  h += `</div>`;
+  return h;
+}
+
+// ---------- Render orchestration ----------
+function render() {
+  document.body.classList.toggle('advanced', state.advanced);
+  document.getElementById('advancedToggle').checked = state.advanced;
+  document.querySelectorAll('[data-action="set-mode"]').forEach(b => { b.classList.toggle('active', b.dataset.value === state.mode); });
+
+  if (state.activeCountry >= state.countries.length) state.activeCountry = state.countries.length - 1;
+  if (state.activeCountry < 0) state.activeCountry = 0;
+
+  const c = state.countries[state.activeCountry];
+  document.getElementById('countryBar').innerHTML = renderCountryBar();
+  document.getElementById('hero').innerHTML = renderHero();
+  document.getElementById('inputPanel').innerHTML = renderInputs(c);
+  document.getElementById('streamChart').innerHTML = renderStreamChart(c);
+  document.getElementById('scaleChart').innerHTML = renderScaleChart(c);
+  document.getElementById('growthChart').innerHTML = renderGrowthChart(c);
+  document.getElementById('sensitivityChart').innerHTML = renderSensitivity(c);
+  document.getElementById('profitChart').innerHTML = renderProfitChart(c);
+
+  const mEl = document.getElementById('multiCompare');
+  if (state.mode === 'multi') { mEl.style.display = 'block'; mEl.innerHTML = renderMultiCompare(); }
+  else { mEl.style.display = 'none'; mEl.innerHTML = ''; }
+
+  saveState();
+}
+
+// ---------- Light re-render (skips input panel to preserve focus/slider drag) ----------
+function renderOutputs() {
+  if (state.activeCountry >= state.countries.length) state.activeCountry = state.countries.length - 1;
+  const c = state.countries[state.activeCountry];
+  document.getElementById('hero').innerHTML = renderHero();
+  document.getElementById('streamChart').innerHTML = renderStreamChart(c);
+  document.getElementById('scaleChart').innerHTML = renderScaleChart(c);
+  document.getElementById('growthChart').innerHTML = renderGrowthChart(c);
+  document.getElementById('sensitivityChart').innerHTML = renderSensitivity(c);
+  document.getElementById('profitChart').innerHTML = renderProfitChart(c);
+  if (state.mode === 'multi') {
+    document.getElementById('countryBar').innerHTML = renderCountryBar();
+    document.getElementById('multiCompare').innerHTML = renderMultiCompare();
+  }
+  if (c.scaleMode === 'annual') {
+    document.querySelectorAll('#inputPanel .tiny-help').forEach(el => {
+      if (el.innerHTML.includes('Computed MAU')) {
+        el.innerHTML = `→ Computed MAU: <strong>${fmtNum(c.annualTourists * c.seasonalityFactor)}</strong>`;
+      }
+    });
+  }
+  saveState();
+}
+
+// ---------- Event delegation ----------
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+  const value = el.dataset.value;
+
+  if (action === 'remove-country') e.stopPropagation();
+
+  switch (action) {
+    case 'set-mode':
+      state.mode = value;
+      if (state.mode === 'multi' && state.countries.length < 2) {
+        const nc = DEFAULT_COUNTRY();
+        nc.name = 'Country 2'; nc.mau = 2000; nc.startingMau = 500;
+        state.countries.push(nc);
+      }
+      render();
+      break;
+    case 'select-country':
+      state.activeCountry = parseInt(value);
+      render();
+      break;
+    case 'remove-country':
+      if (state.countries.length <= 1) return;
+      state.countries.splice(parseInt(value), 1);
+      if (state.activeCountry >= state.countries.length) state.activeCountry = state.countries.length - 1;
+      render();
+      break;
+    case 'add-country': {
+      const nc = DEFAULT_COUNTRY();
+      nc.name = 'Country ' + (state.countries.length + 1);
+      nc.mau = 2000; nc.startingMau = 500;
+      state.countries.push(nc);
+      state.activeCountry = state.countries.length - 1;
+      render();
+      break;
+    }
+    case 'load-preset':
+      if (!PRESETS[value]) return;
+      state.countries = PRESETS[value].map(c => ({ ...DEFAULT_COUNTRY(), ...c, id: 'c_' + Math.random().toString(36).slice(2, 8) }));
+      state.activeCountry = 0;
+      state.mode = state.countries.length > 1 ? 'multi' : 'single';
+      render();
+      showToast('Loaded: ' + el.textContent.trim());
+      break;
+    case 'set-scale-mode':
+      state.countries[state.activeCountry].scaleMode = value;
+      render();
+      break;
+    case 'reset':
+      if (!confirm('Reset all inputs to defaults?')) return;
+      state = { mode: 'single', advanced: state.advanced, activeCountry: 0, countries: [DEFAULT_COUNTRY()] };
+      render();
+      showToast('Reset to defaults');
+      break;
+    case 'save': {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pvq-forecast-' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Config saved as JSON');
+      break;
+    }
+    case 'load':
+      document.getElementById('fileInput').click();
+      break;
+  }
+});
+
+document.addEventListener('input', (e) => {
+  const t = e.target;
+  if (t.id === 'advancedToggle') { state.advanced = t.checked; render(); return; }
+  const key = t.dataset.key;
+  if (!key) return;
+  const c = state.countries[state.activeCountry];
+  if (!c) return;
+  if (t.type === 'text') {
+    c[key] = t.value || 'Unnamed';
+  } else {
+    c[key] = parseFloat(t.value) || 0;
+  }
+  if (t.type === 'range') {
+    const disp = document.querySelector(`[data-value-for="${key}"]`);
+    if (disp) disp.textContent = formatValue(key, parseFloat(t.value));
+  }
+  renderOutputs();
+});
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const p = JSON.parse(ev.target.result);
+      if (p && Array.isArray(p.countries) && p.countries.length > 0) {
+        state = p;
+        state.countries = state.countries.map(c => ({ ...DEFAULT_COUNTRY(), ...c }));
+        render();
+        showToast('Config loaded');
+      } else showToast('Invalid file format');
+    } catch (err) { showToast('Could not load: ' + err.message); }
+  };
+  reader.readAsText(f);
+  e.target.value = '';
+});
+
+function formatValue(key, v) {
+  const f = {
+    mau: v => fmtNum(v), annualTourists: v => fmtNum(v), seasonalityFactor: v => (v * 100).toFixed(1) + '%',
+    bookingConversion: v => (v * 100).toFixed(1) + '%', avgBookingValue: v => '$' + v, commissionRate: v => (v * 100).toFixed(1) + '%',
+    bookingsPerBooker: v => v.toFixed(2), premiumConversion: v => (v * 100).toFixed(1) + '%', premiumArpu: v => '$' + v.toFixed(2),
+    affiliatePerTourist: v => '$' + v.toFixed(2), operatorDensity: v => '1 per ' + v, premiumOpConversion: v => (v * 100).toFixed(0) + '%',
+    avgPremiumOpSpend: v => '$' + v + '/mo', totalBadges: v => v + ' badges', sponsoredBadgeAdoption: v => (v * 100).toFixed(0) + '%',
+    avgSponsoredPrice: v => '$' + v + '/mo', promotedConversion: v => (v * 100).toFixed(0) + '%', avgPromotedPrice: v => '$' + v + '/mo',
+    startingMau: v => fmtNum(v), monthlyGrowthRate: v => (v * 100).toFixed(1) + '%',
+  };
+  return f[key] ? f[key](v) : v;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>
