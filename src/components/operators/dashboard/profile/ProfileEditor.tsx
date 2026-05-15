@@ -500,7 +500,7 @@ export function ProfileEditor({ initial, isMock }: Props) {
               specialtyLabel={(id) => tApply(`specialty.${id}` as const)}
               languages={languages}
               languageLabel={(id) => tApply(`language.${id}` as const)}
-              verifiedLabel={t("verified")}
+              localPickLabel={t("localPick")}
               bookCta={t("previewBookCta")}
             />
           </div>
@@ -614,7 +614,7 @@ function GuideCardPreview({
   specialtyLabel,
   languages,
   languageLabel,
-  verifiedLabel,
+  localPickLabel,
   bookCta,
 }: {
   businessName: string;
@@ -628,7 +628,7 @@ function GuideCardPreview({
   specialtyLabel: (id: string) => string;
   languages: string[];
   languageLabel: (id: string) => string;
-  verifiedLabel: string;
+  localPickLabel: string;
   bookCta: string;
 }) {
   const truncatedBio =
@@ -669,7 +669,7 @@ function GuideCardPreview({
           </div>
           {isFeatured ? (
             <span className="mt-1.5 inline-flex items-center gap-1 rounded-card bg-amber px-2 py-0.5 font-body text-[10px] font-bold uppercase tracking-wider text-ocean">
-              ★ {verifiedLabel}
+              ★ {localPickLabel}
             </span>
           ) : null}
         </div>

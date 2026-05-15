@@ -53,7 +53,7 @@ function DownloadContent() {
               <div className="relative h-full w-full animate-float">
                 <Image
                   src="/assets/branding/ody-explorer.png"
-                  alt="Ody, the otter explorer"
+                  alt="Ody the otter, ready to go"
                   fill
                   priority
                   sizes="(max-width: 640px) 180px, (max-width: 1024px) 220px, 260px"

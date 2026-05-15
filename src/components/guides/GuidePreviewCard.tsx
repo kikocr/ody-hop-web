@@ -11,8 +11,18 @@ function cn(...parts: Array<string | undefined | false | null>): string {
   return parts.filter(Boolean).join(" ");
 }
 
+function firstNameOf(fullName: string): string {
+  const trimmed = fullName.trim();
+  if (!trimmed) return "";
+  return trimmed.split(/\s+/)[0];
+}
+
 export function GuidePreviewCard({ guide, className }: Props) {
   const t = useTranslations("destinations");
+  const firstName = firstNameOf(guide.name);
+  const ctaLabel = firstName
+    ? t("viewProfile", { firstName })
+    : t("viewProfileFallback");
   return (
     <GlassCard
       className={cn(
@@ -61,7 +71,7 @@ export function GuidePreviewCard({ guide, className }: Props) {
         type="button"
         className="mt-auto inline-flex items-center justify-between rounded-card border border-amber/40 bg-transparent px-3 py-2 font-body text-sm font-semibold text-amber transition-colors hover:bg-amber-soft"
       >
-        <span>{t("viewProfile")}</span>
+        <span>{ctaLabel}</span>
         <span aria-hidden>→</span>
       </button>
     </GlassCard>

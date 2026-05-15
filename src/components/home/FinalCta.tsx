@@ -55,7 +55,7 @@ export function FinalCta() {
             <div className="relative h-full w-full animate-float-slow">
               <Image
                 src="/assets/branding/ody-legendary.png"
-                alt="Ody, Legendary Explorer"
+                alt="Ody, Local Legend"
                 fill
                 sizes="(max-width: 640px) 240px, (max-width: 1024px) 300px, 400px"
                 className="object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.55)]"

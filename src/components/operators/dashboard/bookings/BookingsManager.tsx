@@ -641,9 +641,9 @@ function csvCell(value: unknown): string {
 function toCsv(bookings: DashboardBooking[]): string {
   const header = [
     "Date",
-    "Tourist",
-    "Experience",
-    "Destination",
+    "Traveler",
+    "Tour",
+    "Country",
     "Party Size",
     "Amount",
     "Commission",

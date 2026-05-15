@@ -11,10 +11,10 @@ const NAV_ITEMS = [
 ];
 
 const STATS = [
-  { label: "Total Bookings", value: "284", trend: "+12% MoM" },
+  { label: "People Booked", value: "284", trend: "+12% MoM" },
   { label: "Revenue", value: "$24.6K", trend: "+18% MoM" },
-  { label: "Avg Rating", value: "4.9", trend: "211 reviews" },
-  { label: "Profile Views", value: "8.2K", trend: "+24% MoM" },
+  { label: "Rating", value: "4.9", trend: "211 reviews" },
+  { label: "People Reached", value: "8.2K", trend: "+24% MoM" },
 ];
 
 const ROWS = [
@@ -79,7 +79,7 @@ export function DashboardMockup() {
               Ody Hop
             </span>
             <span className="hidden font-body text-xs text-warmgray sm:inline">
-              · Operators
+              · Local Partners
             </span>
           </div>
           <div className="flex items-center gap-3">

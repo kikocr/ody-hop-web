@@ -273,7 +273,7 @@ function DestinationDownloadCta({
             <div className="relative h-full w-full animate-float-slow">
               <Image
                 src="/assets/branding/ody-explorer.png"
-                alt="Ody, the otter explorer"
+                alt="Ody the otter, ready to go"
                 fill
                 sizes="(max-width: 640px) 200px, (max-width: 1024px) 260px, 320px"
                 className="object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.55)]"

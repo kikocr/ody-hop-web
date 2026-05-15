@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { CATEGORIES } from "@/lib/constants";
 import { type CategoryBreakdown } from "@/lib/mock-data";
@@ -12,6 +13,10 @@ function cn(...parts: Array<string | undefined | false | null>): string {
 }
 
 export function CategoryGrid({ breakdown }: Props) {
+  const tBilling = useTranslations("billing");
+  const tc = useTranslations("common");
+  const goDeeperLabel = tBilling("upgrade");
+
   return (
     <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
       {CATEGORIES.map((category) => {
@@ -46,11 +51,11 @@ export function CategoryGrid({ breakdown }: Props) {
                 {category.name}
               </h3>
               <span className="inline-flex items-center rounded-card border border-glass-border bg-glass-bg px-2 py-0.5 font-body text-xs font-semibold text-amber">
-                {count} badges
+                {count} {tc("badges")}
               </span>
               {isPremium ? (
                 <span className="inline-flex items-center rounded-card bg-amber px-2 py-0.5 font-body text-[10px] font-bold uppercase tracking-wider text-ocean">
-                  Premium
+                  {goDeeperLabel}
                 </span>
               ) : null}
             </GlassCard>

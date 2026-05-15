@@ -3,6 +3,29 @@ import { useTranslations } from "next-intl";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { OTTER_TIERS } from "@/lib/constants";
 
+const TIER_TRANSLATION_KEYS = {
+  newcomer: {
+    label: "evolutionTierNewcomerLabel",
+    desc: "evolutionTierNewcomerDesc",
+  },
+  regular: {
+    label: "evolutionTierRegularLabel",
+    desc: "evolutionTierRegularDesc",
+  },
+  insider: {
+    label: "evolutionTierInsiderLabel",
+    desc: "evolutionTierInsiderDesc",
+  },
+  local: {
+    label: "evolutionTierLocalLabel",
+    desc: "evolutionTierLocalDesc",
+  },
+  legend: {
+    label: "evolutionTierLegendLabel",
+    desc: "evolutionTierLegendDesc",
+  },
+} as const;
+
 export function OdyEvolution() {
   const t = useTranslations("home");
 
@@ -24,6 +47,9 @@ export function OdyEvolution() {
 
         <ol className="mt-14 grid grid-cols-2 gap-x-4 gap-y-12 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-2">
           {OTTER_TIERS.map((tier, index) => {
+            const keys = TIER_TRANSLATION_KEYS[tier.id];
+            const label = t(keys.label);
+            const desc = t(keys.desc);
             const range =
               tier.maxBadges === null
                 ? `${tier.minBadges}+ badges`
@@ -40,18 +66,21 @@ export function OdyEvolution() {
                   />
                   <Image
                     src={tier.image}
-                    alt={`Ody as ${tier.label}`}
+                    alt={`Ody as ${label}`}
                     fill
                     sizes="(max-width: 640px) 140px, (max-width: 1024px) 160px, 200px"
                     className="object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.5)]"
                   />
                 </div>
                 <h3 className="mt-4 font-display text-base font-semibold text-white sm:text-lg">
-                  {tier.label}
+                  {label}
                 </h3>
                 <span className="mt-1 inline-flex items-center rounded-card border border-amber/40 bg-amber-soft px-2.5 py-0.5 font-body text-xs font-semibold text-amber">
                   {range}
                 </span>
+                <p className="mt-2 max-w-[180px] font-body text-xs leading-snug text-warmgray">
+                  {desc}
+                </p>
 
                 {index < OTTER_TIERS.length - 1 ? (
                   <span
@@ -65,6 +94,10 @@ export function OdyEvolution() {
             );
           })}
         </ol>
+
+        <p className="mt-12 text-center font-body text-xs uppercase tracking-[0.22em] text-warmgray">
+          {t("evolutionTopTierNames")}
+        </p>
       </div>
     </section>
   );

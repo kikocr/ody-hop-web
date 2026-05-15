@@ -59,7 +59,7 @@ export function Hero() {
             <div className="relative h-full w-full animate-float">
               <Image
                 src="/assets/branding/ody-explorer.png"
-                alt="Ody, the otter explorer"
+                alt="Ody the otter, ready to go"
                 fill
                 priority
                 sizes="(max-width: 640px) 260px, (max-width: 1024px) 340px, 460px"

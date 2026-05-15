@@ -7,11 +7,11 @@ export function organizationSchema(): Record<string, unknown> {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Ody Hop",
-    alternateName: "Ody Hop — Collect the World",
+    alternateName: "Ody Hop — Travel like you know someone here",
     url: SITE,
     logo: `${SITE}/assets/icon.png`,
     description:
-      "Ody Hop is a gamified tourism platform — explore real destinations, collect GPS-verified badges, climb the leaderboard, and book vetted local guides.",
+      "Ody Hop is a gamified tourism platform — go to real places, collect GPS-verified badges, climb the leaderboard, and book vetted locals.",
     sameAs: [
       "https://instagram.com/odyhop",
       "https://twitter.com/odyhop",
@@ -46,7 +46,7 @@ export function touristDestinationSchema(
     description: destination.tagline,
     url,
     image: `${SITE}${destination.heroImage}`,
-    touristType: ["Adventure traveler", "Cultural traveler", "Explorer"],
+    touristType: ["Adventure traveler", "Cultural traveler", "Independent traveler"],
     address: {
       "@type": "PostalAddress",
       addressCountry: destination.country,

@@ -382,7 +382,7 @@ const SA_BADGES: SampleBadge[] = [
   {
     id: "sa-madain-saleh",
     name: "Hegra Tombs",
-    description: "Explore Nabataean tombs at Saudi's first UNESCO site",
+    description: "Walk through Nabataean tombs at Saudi's first UNESCO site",
     points: 500,
     difficulty: "hard",
     rarity: "epic",

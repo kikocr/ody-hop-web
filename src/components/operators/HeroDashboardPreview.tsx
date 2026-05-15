@@ -11,7 +11,7 @@ export function HeroDashboardPreview() {
         <header className="flex items-center justify-between">
           <div>
             <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-amber">
-              Operator Dashboard
+              Local Partner Dashboard
             </p>
             <p className="mt-1 font-display text-base font-bold text-white">
               Pura Vida Tours
@@ -24,10 +24,10 @@ export function HeroDashboardPreview() {
         </header>
 
         <ul className="mt-5 grid grid-cols-2 gap-3">
-          <Stat label="Bookings" value="42" trend="+12%" />
+          <Stat label="Booked" value="42" trend="+12%" />
           <Stat label="Revenue" value="$3.8K" trend="+18%" />
           <Stat label="Rating" value="4.9" trend="★ 128" />
-          <Stat label="Views" value="1.2K" trend="+24%" />
+          <Stat label="Reached" value="1.2K" trend="+24%" />
         </ul>
 
         <div className="mt-5 rounded-card border border-glass-border bg-ocean-dark/60 p-3">

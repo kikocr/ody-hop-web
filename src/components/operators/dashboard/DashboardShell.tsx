@@ -254,6 +254,23 @@ function UserBlock({
   onSignOut: () => void;
   signOutLabel: string;
 }) {
+  return <UserBlockInner operatorName={operatorName} initials={initials} onSignOut={onSignOut} signOutLabel={signOutLabel} />;
+}
+
+function UserBlockInner({
+  operatorName,
+  initials,
+  onSignOut,
+  signOutLabel,
+}: {
+  operatorName: string;
+  initials: string;
+  onSignOut: () => void;
+  signOutLabel: string;
+}) {
+  const t = useTranslations("dashboard");
+  const roleLabel = t("operatorRoleLabel");
+  const fallbackName = t("operatorFallbackName");
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
@@ -265,10 +282,10 @@ function UserBlock({
         </span>
         <div className="min-w-0">
           <p className="truncate font-body text-sm font-semibold text-white">
-            {operatorName || "Operator"}
+            {operatorName || fallbackName}
           </p>
           <p className="font-body text-[10px] uppercase tracking-wider text-warmgray">
-            Operator
+            {roleLabel}
           </p>
         </div>
       </div>
@@ -297,6 +314,9 @@ function DesktopTopBar({
   initials: string;
   onSignOut: () => void;
 }) {
+  const t = useTranslations("dashboard");
+  const roleLabel = t("operatorRoleLabel");
+  const fallbackName = t("operatorFallbackName");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -328,10 +348,10 @@ function DesktopTopBar({
           </span>
           <span className="hidden flex-col items-start sm:flex">
             <span className="font-body text-xs uppercase tracking-wider text-warmgray">
-              Operator
+              {roleLabel}
             </span>
             <span className="font-body text-sm font-semibold text-white">
-              {operatorName || "Operator"}
+              {operatorName || fallbackName}
             </span>
           </span>
           <ChevronDownIcon />

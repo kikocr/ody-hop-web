@@ -65,7 +65,7 @@ function Hero({ t, tc }: { t: Translator; tc: Translator }) {
       <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:py-24">
         <div className="flex flex-col gap-6 text-center lg:col-span-7 lg:text-left">
           <span className="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amber">
-            For Tour Guides &amp; Operators
+            {t("heroEyebrow")}
           </span>
           <h1 className="font-display text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
             {t("heroTitle")}
@@ -106,8 +106,8 @@ function ValueProps({ t }: { t: Translator }) {
     >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          title="Why operators choose Ody Hop"
-          subtitle="Tourists are already collecting badges in your destination. Meet them where they are."
+          title={t("valuePropsTitle")}
+          subtitle={t("valuePropsSubtitle")}
           align="center"
         />
         <ul className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -178,7 +178,7 @@ function HowItWorks({ t }: { t: Translator }) {
                     <>
                       <GlassCard className="lg:text-right">
                         <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-amber">
-                          Step {stepNumber}
+                          {t("stepLabel", { n: stepNumber })}
                         </p>
                         <p className="mt-2 font-display text-lg font-semibold text-white">
                           {label}
@@ -191,7 +191,7 @@ function HowItWorks({ t }: { t: Translator }) {
                       <div className="hidden lg:block" />
                       <GlassCard>
                         <p className="font-body text-xs font-semibold uppercase tracking-[0.18em] text-amber">
-                          Step {stepNumber}
+                          {t("stepLabel", { n: stepNumber })}
                         </p>
                         <p className="mt-2 font-display text-lg font-semibold text-white">
                           {label}
@@ -276,8 +276,8 @@ function Pricing({ t, tc }: { t: Translator; tc: Translator }) {
           <PriceCard
             tier={t("freeTier")}
             tagline={t("freeTierDesc")}
-            price="Free"
-            priceSuffix="+ 15–20% per booking"
+            price={t("freePriceLabel")}
+            priceSuffix={t("freePriceSuffix")}
             features={freeFeatures}
             cta={tc("applyNow")}
             ctaHref="/operators/apply"
@@ -286,7 +286,7 @@ function Pricing({ t, tc }: { t: Translator; tc: Translator }) {
           <PriceCard
             tier={t("featuredTier")}
             tagline={t("featuredTierDesc")}
-            price="$—"
+            price={t("featuredPricePlaceholder")}
             priceSuffix={t("pricingComingSoon")}
             features={featuredFeatures}
             cta={tc("applyNow")}

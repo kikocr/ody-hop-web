@@ -22,22 +22,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Ody Hop — Collect the World",
+  title: "Ody Hop — Travel like you know someone here",
   description:
-    "Ody Hop is a gamified tourism platform — explore real destinations, collect badges, climb the leaderboard, and book vetted local guides.",
+    "Ody Hop is a gamified tourism platform — go to real places, collect GPS-verified badges, climb the leaderboard, and book vetted locals.",
   metadataBase: new URL("https://odyhop.com"),
   openGraph: {
-    title: "Ody Hop — Collect the World",
+    title: "Ody Hop — Travel like you know someone here",
     description:
-      "Explore real destinations, collect badges, climb the leaderboard, and book vetted local guides.",
+      "Go to real places, collect GPS-verified badges, climb the leaderboard, and book vetted locals.",
     type: "website",
     siteName: "Ody Hop",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ody Hop — Collect the World",
+    title: "Ody Hop — Travel like you know someone here",
     description:
-      "Explore real destinations, collect badges, climb the leaderboard, and book vetted local guides.",
+      "Go to real places, collect GPS-verified badges, climb the leaderboard, and book vetted locals.",
   },
 };
 
